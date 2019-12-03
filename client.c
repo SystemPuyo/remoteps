@@ -65,7 +65,7 @@ int main(int argc, char * argv[]){
       buf[sread] = 0;
       write(fp, buf, sread);
       bzero(buf, sizeof(buf));
-      printf("processing : %4.2f%% ", total * 100 / (float) filesize);
+      printf("processing : %4.2f\n%%", total * 100 / (float) filesize);
       usleep(1000);
 
     }

@@ -85,6 +85,7 @@ int main(int argc, char * argv[]) {
         printf("processing :%4.2f%%\n ", total * 100 / (float) filesize);
         usleep(10000);
   }
+    total = 0;
   //do something later
 }
 return 0;
