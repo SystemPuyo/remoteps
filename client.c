@@ -9,6 +9,11 @@
 #include<arpa/inet.h>
 
 #define MAXLINE 127
+int display_menu();
+void kill_ps(int, char*);
+void detail_ps();
+void hardware_info();
+void get_history();
 
 int main(int argc, char * argv[]){
 	struct sockaddr_in servaddr;
@@ -17,7 +22,7 @@ int main(int argc, char * argv[]){
 	char buf[MAXLINE+1],server_ip[20];
 	int filesize, fp, filenamesize;
 	int sread, total = 0;
-
+	int sel = 0;
 	if(argc !=3){
 		printf("usage : %s ip_address port",argv[0]);
 		exit(1);
@@ -28,6 +33,24 @@ int main(int argc, char * argv[]){
     		exit(0);
   	}
 
+	/*sel = display_menu();
+	switch(sel){
+		case 1:
+		kill_ps();
+		break;
+		case 2:
+		detail_ps();
+		break;
+		case 3:
+		hardware_info();
+		break;
+		case 4:
+		get_history();
+		break;
+		default:
+		fprintf(stderr, "input error\n");
+		exit(1);
+	}*/
   // 에코 서버의 소켓주소 구조체 작성
   	bzero((char * ) & servaddr, sizeof(servaddr));
   	servaddr.sin_family = AF_INET;
@@ -36,7 +59,7 @@ int main(int argc, char * argv[]){
 
   // 연결요청
   	if (connect(s, (struct sockaddr * ) & servaddr, sizeof(servaddr)) < 0) {
-   		 perror("connect fail");
+   		perror("connect fail");
     		exit(0);
   	}
 
@@ -70,4 +93,53 @@ int main(int argc, char * argv[]){
 
     }
 
+}
+
+int display_menu(void) {
+	int menu = 0;
+	char input[100] = { '\0' };
+	while (1) {
+		system("clear");
+		printf("\n\t\t\t\t%s", "Remote Ps");
+		printf("\n\t\t\t=========================================");
+		printf("\n\t\t\t\t%16s\n", "PS MENU");
+		printf("\n\t\t\t=========================================");
+		printf("\n\t\t\t=\t1) %s\t\t=", "kill process");
+		printf("\n\t\t\t=\t2) %s\t\t=", "Show detail ps");
+		printf("\n\t\t\t=\t3) %s\t\t=", "Show hardware info");
+		printf("\n\t\t\t=\t4) %s\t\t=", "Show process use history");
+		printf("\n\t\t\t=========================================");
+		printf("\n\t\t\t=> ");
+		scanf("%s", input);
+		menu = atoi(input); // to handle some wrong input
+		if (strlen(input) != 1) { // some wrong input(not int) ex) abcd, 1abcd, 2!af43 ...
+			continue;
+		}
+		if (menu < 1 || menu > 4) { // int input, but not in menu number
+			continue;
+		}
+		else {
+			return menu;
+		}
+	
+	}
+	return 0;
+}
+
+void kill_ps (int index, char *psname){
+	// kill process by pid or psname
+}
+
+void detail_ps(){
+	// by top command, get deatil info
+}
+
+void hardware_info(){
+	// by lshw command, get hardware info
+	// and display resource use with progress bar
+}
+
+void get_history(){
+	// get result of top command by file (by 1s), and find most used program,
+	// most resource reused program by multithreading
 }
