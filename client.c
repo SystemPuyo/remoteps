@@ -14,6 +14,7 @@ void kill_ps(int, char*);
 void detail_ps();
 void hardware_info();
 void get_history();
+void program_exit();
 
 int main(int argc, char * argv[]){
 	struct sockaddr_in servaddr;
@@ -33,24 +34,6 @@ int main(int argc, char * argv[]){
     		exit(0);
   	}
 
-	/*sel = display_menu();
-	switch(sel){
-		case 1:
-		kill_ps();
-		break;
-		case 2:
-		detail_ps();
-		break;
-		case 3:
-		hardware_info();
-		break;
-		case 4:
-		get_history();
-		break;
-		default:
-		fprintf(stderr, "input error\n");
-		exit(1);
-	}*/
   // 에코 서버의 소켓주소 구조체 작성
   	bzero((char * ) & servaddr, sizeof(servaddr));
   	servaddr.sin_family = AF_INET;
@@ -66,6 +49,31 @@ int main(int argc, char * argv[]){
   //연결 되었으면 수신 준비
     puts("서버와 연결됨..");
 
+/*
+	scanf("%d", &sel);
+	send(s, &sel, sizeof(int), 0);
+*/	//서버로 입력한 값을 보낸다.
+/*
+	sel = display_menu();
+	switch(sel){
+		case 1:
+		kill_ps();
+		break;
+		case 2:
+		detail_ps();
+		break;
+		case 3:
+		hardware_info();
+		break;
+		case 4:
+		get_history();
+		break;
+		case 5:
+		program_exit();
+		default:
+		fprintf(stderr, "input error\n");
+		exit(1);
+	}*/
     inet_ntop(AF_INET, & servaddr.sin_addr.s_addr, server_ip, sizeof(server_ip));
     printf("IP : %s ", server_ip);
     printf("Port : %x ", ntohs(servaddr.sin_port));
@@ -81,18 +89,18 @@ int main(int argc, char * argv[]){
     strcat(filename, "_backup");
     fp = open(filename, O_WRONLY | O_CREAT | O_TRUNC);
 
+    printf("file is receiving now.. \n");
     while (total != filesize) {
       sread = recv(s, buf, 100, 0);
-      printf("file is receiving now.. ");
       total += sread;
       buf[sread] = 0;
       write(fp, buf, sread);
       bzero(buf, sizeof(buf));
-      printf("processing : %4.2f\n%%", total * 100 / (float) filesize);
+      printf("processing : %4.2f\r%%", total * 100 / (float) filesize);
       usleep(1000);
 
     }
-
+	printf("\n");
 }
 
 int display_menu(void) {

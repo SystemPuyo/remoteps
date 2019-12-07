@@ -19,6 +19,7 @@ int main(int argc, char * argv[]) {
   char filename[20];
   int filesize = 0,filenamesize;
   int total = 0, sread, fp;
+  int sel;
 
   if (argc != 2) {
     printf("usage: %s port ", argv[0]);
@@ -45,7 +46,6 @@ int main(int argc, char * argv[]) {
   // 소켓을 수동 대기모드로 세팅
   listen(listen_sock, 5);
 
-  while (1) {
     puts("서버가 연결요청을 기다림..");
     // 연결요청을 기다림
     accp_sock = accept(listen_sock,
@@ -60,33 +60,44 @@ int main(int argc, char * argv[]) {
 
     inet_ntop(AF_INET, & cliaddr.sin_addr.s_addr, cli_ip, sizeof(cli_ip));
     printf("IP : %s ", cli_ip);
-    printf("Port : %x ", ntohs(cliaddr.sin_port));
+    printf("Port : %x \n", ntohs(cliaddr.sin_port));
     
-    system("top -b -n 1 > top.txt");
-    
-    filenamesize = strlen("top.txt");
-    
-    if((fp = open("top.txt",O_RDONLY)) < 0){
-    	printf("open failed");
-    	exit(0);
-    }
-    send(accp_sock, filename, sizeof(filename), 0);//파일의 이름과
+    while(1){
 
-    filesize = lseek(fp, 0, SEEK_END);
-    send(accp_sock, & filesize, sizeof(filesize), 0);//파일의 사이즈를 전송
-    lseek(fp, 0, SEEK_SET);
+      /*
+      printf("명령어를 기다리고 있습니다.\n");
+      recv(accp_sock, &sel, sizeof(int), 0);
 
-    while (total != filesize) {
+      if(sel == 1)
+      printf("1\n");
+      *///여기는 클라이언트에서 입력을 넘기면 그 입력 된 숫자를 받음
+
+      system("top -b -n 1 > top.txt");
+    
+      filenamesize = strlen("top.txt");
+    
+      if((fp = open("top.txt",O_RDONLY)) < 0){
+    	  printf("open failed");
+      	exit(0);
+      }
+      send(accp_sock, filename, sizeof(filename), 0);//파일의 이름과
+
+      filesize = lseek(fp, 0, SEEK_END);
+      send(accp_sock, & filesize, sizeof(filesize), 0);//파일의 사이즈를 전송
+      lseek(fp, 0, SEEK_SET);
+
+      printf("file is sending now.. \n");
+      while (total != filesize) {
         sread = read(fp, buf, 100);
-        printf("file is sending now.. ");
         total += sread;
         buf[sread] = 0;
         send(accp_sock, buf, sread, 0);
-        printf("processing :%4.2f%%\n ", total * 100 / (float) filesize);
+        printf("processing :%4.2f%%\r", total * 100 / (float) filesize);
         usleep(10000);
-  }
-    total = 0;
-  //do something later
-}
+      }
+     printf("\n");
+     total = 0;
+     //do something later
+    }
 return 0;
 }

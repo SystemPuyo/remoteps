@@ -1,13 +1,12 @@
-top - 03:44:29 up 46 min,  1 user,  load average: 0.70, 0.55, 0.48
-Tasks: 208 total,   1 running, 170 sleeping,   0 stopped,   0 zombie
+top - 03:44:32 up 46 min,  1 user,  load average: 0.70, 0.55, 0.48
+Tasks: 207 total,   2 running, 168 sleeping,   0 stopped,   0 zombie
 %Cpu(s): 11.4 us,  2.4 sy,  0.3 ni, 85.2 id,  0.5 wa,  0.0 hi,  0.2 si,  0.0 st
-KiB Mem :  2038576 total,   115464 free,  1423540 used,   499572 buff/cache
-KiB Swap:   969960 total,   717768 free,   252192 used.   382296 avail Mem 
+KiB Mem :  2038576 total,   117220 free,  1421796 used,   499560 buff/cache
+KiB Swap:   969960 total,   717768 free,   252192 used.   384036 avail Mem 
 
   PID USER      PR  NI    VIRT    RES    SHR S  %CPU %MEM     TIME+ COMMAND
- 1246 taehwan   20   0 3595176 309520  56720 S  18.8 15.2   6:18.18 gnome-shell
- 1066 taehwan   20   0  646724 136532  55264 S   6.2  6.7   1:29.86 Xorg
- 3856 taehwan   20   0   50172   3640   3068 R   6.2  0.2   0:00.01 top
+ 1246 taehwan   20   0 3595176 309520  56720 S  12.5 15.2   6:18.25 gnome-shell
+ 1066 taehwan   20   0  646724 136532  55264 S   6.2  6.7   1:29.88 Xorg
     1 root      20   0  159816   5144   3456 S   0.0  0.3   0:02.95 systemd
     2 root      20   0       0      0      0 S   0.0  0.0   0:00.00 kthreadd
     3 root       0 -20       0      0      0 I   0.0  0.0   0:00.00 rcu_gp
@@ -15,7 +14,7 @@ KiB Swap:   969960 total,   717768 free,   252192 used.   382296 avail Mem
     6 root       0 -20       0      0      0 I   0.0  0.0   0:00.00 kworker/0:+
     8 root       0 -20       0      0      0 I   0.0  0.0   0:00.00 mm_percpu_+
     9 root      20   0       0      0      0 S   0.0  0.0   0:00.12 ksoftirqd/0
-   10 root      20   0       0      0      0 I   0.0  0.0   0:01.77 rcu_sched
+   10 root      20   0       0      0      0 I   0.0  0.0   0:01.78 rcu_sched
    11 root      rt   0       0      0      0 S   0.0  0.0   0:00.01 migration/0
    12 root     -51   0       0      0      0 S   0.0  0.0   0:00.00 idle_injec+
    13 root      20   0       0      0      0 I   0.0  0.0   0:01.32 kworker/0:+
@@ -168,9 +167,9 @@ KiB Swap:   969960 total,   717768 free,   252192 used.   382296 avail Mem
  1406 taehwan   20   0  430596   7164   6788 S   0.0  0.4   0:00.31 gsd-wacom
  1413 taehwan   20   0  279820   3252   3252 S   0.0  0.2   0:00.01 gsd-a11y-s+
  1416 taehwan   20   0  345748   7044   6676 S   0.0  0.3   0:00.29 gsd-clipbo+
- 1417 taehwan   20   0  660900   7804   7060 S   0.0  0.4   0:00.46 gsd-color
+ 1417 taehwan   20   0  660900   7804   7060 S   0.0  0.4   0:00.47 gsd-color
  1423 taehwan   20   0  471388   5588   5588 S   0.0  0.3   0:00.03 gsd-dateti+
- 1426 taehwan   20   0  366120   3248   3180 S   0.0  0.2   0:00.06 gsd-housek+
+ 1426 taehwan   20   0  366120   3248   3180 S   0.0  0.2   0:00.07 gsd-housek+
  1427 taehwan   20   0  508580   7004   6640 S   0.0  0.3   0:00.28 gsd-keyboa+
  1432 taehwan   20   0 1015832  10152   8428 S   0.0  0.5   0:00.32 gsd-media-+
  1433 taehwan   20   0  279828   3368   3368 S   0.0  0.2   0:00.00 gsd-mouse
@@ -190,9 +189,9 @@ KiB Swap:   969960 total,   717768 free,   252192 used.   382296 avail Mem
  1727 root      20   0  558864  13624   4260 S   0.0  0.7   0:00.34 fwupd
  1828 taehwan   20   0 1073064  11944   6208 S   0.0  0.6   0:00.05 deja-dup-m+
  1844 taehwan   20   0 3090908 214636  65216 S   0.0 10.5   0:32.41 firefox
- 1898 taehwan   20   0 2820016 134492  56120 S   0.0  6.6   0:10.34 Web Content
+ 1898 taehwan   20   0 2820016 134492  56120 R   0.0  6.6   0:10.34 Web Content
  1945 taehwan   20   0 2645416  47208  22128 S   0.0  2.3   0:01.39 WebExtensi+
- 2113 taehwan   20   0  846828  28712  14972 S   0.0  1.4   0:08.51 gnome-term+
+ 2113 taehwan   20   0  846828  28712  14972 S   0.0  1.4   0:08.53 gnome-term+
  2123 taehwan   20   0   31244   4356   2608 S   0.0  0.2   0:00.10 bash
  2273 taehwan   20   0   31232   4380   2624 S   0.0  0.2   0:00.15 bash
  2383 taehwan   20   0 1328676  85796  40004 S   0.0  4.2   0:31.37 code
@@ -201,15 +200,15 @@ KiB Swap:   969960 total,   717768 free,   252192 used.   382296 avail Mem
  2491 taehwan   20   0  764096  63556  31852 S   0.0  3.1   0:03.17 code
  2619 taehwan   20   0  445764   6156   5208 S   0.0  0.3   0:00.02 gvfsd-netw+
  2641 taehwan   20   0  382780   6268   5336 S   0.0  0.3   0:00.01 gvfsd-dnssd
- 2652 taehwan   20   0 1146784 209288  63240 S   0.0 10.3   2:02.96 code
- 2671 taehwan   20   0  665708  62292  19396 S   0.0  3.1   0:04.36 code
- 2683 taehwan   20   0  585692  36464  17040 S   0.0  1.8   0:04.48 code
+ 2652 taehwan   20   0 1146784 207792  63240 S   0.0 10.2   2:03.01 code
+ 2671 taehwan   20   0  665708  62300  19396 S   0.0  3.1   0:04.38 code
+ 2683 taehwan   20   0  585692  36648  17040 S   0.0  1.8   0:04.75 code
  2751 root      20   0       0      0      0 I   0.0  0.0   0:00.00 kworker/0:+
  2886 root      20   0       0      0      0 I   0.0  0.0   0:00.07 kworker/u4+
  2901 taehwan   20   0   30984   4636   3036 S   0.0  0.2   0:00.04 bash
  3606 root      20   0       0      0      0 I   0.0  0.0   0:00.03 kworker/u4+
  3646 taehwan   20   0 2587292  79920  61284 S   0.0  3.9   0:00.54 Web Content
  3774 root      20   0       0      0      0 I   0.0  0.0   0:00.01 kworker/u4+
- 3853 taehwan   20   0    4508    752    688 S   0.0  0.0   0:00.00 server
- 3854 taehwan   20   0    4508    716    652 S   0.0  0.0   0:00.00 client
- 3855 taehwan   20   0    4624    880    812 S   0.0  0.0   0:00.00 sh
+ 3853 taehwan   20   0    4508    752    688 S   0.0  0.0   0:00.01 server
+ 3857 taehwan   20   0    4624    812    744 S   0.0  0.0   0:00.00 sh
+ 3858 taehwan   20   0   50172   3580   3008 R   0.0  0.2   0:00.00 top
