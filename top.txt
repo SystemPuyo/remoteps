@@ -1,30 +1,27 @@
-top - 17:33:33 up 13 min,  1 user,  load average: 0.34, 0.30, 0.29
-Tasks: 201 total,   1 running, 164 sleeping,   0 stopped,   0 zombie
-%Cpu(s): 11.1 us,  3.0 sy,  0.2 ni, 84.8 id,  0.7 wa,  0.0 hi,  0.3 si,  0.0 st
-KiB Mem :  2038576 total,    67452 free,  1204504 used,   766620 buff/cache
-KiB Swap:   969960 total,   969436 free,      524 used.   623076 avail Mem 
+top - 17:48:14 up 28 min,  1 user,  load average: 1.18, 0.73, 0.46
+Tasks: 202 total,   1 running, 164 sleeping,   0 stopped,   0 zombie
+%Cpu(s): 10.1 us,  2.6 sy,  0.1 ni, 86.6 id,  0.4 wa,  0.0 hi,  0.2 si,  0.0 st
+KiB Mem :  2038576 total,   112228 free,  1213604 used,   712744 buff/cache
+KiB Swap:   969960 total,   969436 free,      524 used.   626908 avail Mem 
 
   PID USER      PR  NI    VIRT    RES    SHR S  %CPU %MEM     TIME+ COMMAND
- 1367 taehwan   20   0 3535604 311672 127928 S   6.2 15.3   1:22.56 gnome-shell
- 1875 taehwan   20   0  661384  95456  49776 S   6.2  4.7   0:02.52 code
- 2379 taehwan   20   0   50172   3648   3072 R   6.2  0.2   0:00.01 top
-    1 root      20   0  159836   8912   6536 S   0.0  0.4   0:01.92 systemd
+ 2908 taehwan   20   0   50172   3672   3096 R   6.2  0.2   0:00.01 top
+    1 root      20   0  159836   8912   6536 S   0.0  0.4   0:02.51 systemd
     2 root      20   0       0      0      0 S   0.0  0.0   0:00.00 kthreadd
     3 root       0 -20       0      0      0 I   0.0  0.0   0:00.00 rcu_gp
     4 root       0 -20       0      0      0 I   0.0  0.0   0:00.00 rcu_par_gp
     6 root       0 -20       0      0      0 I   0.0  0.0   0:00.00 kworker/0:+
-    7 root      20   0       0      0      0 I   0.0  0.0   0:00.04 kworker/u4+
     8 root       0 -20       0      0      0 I   0.0  0.0   0:00.00 mm_percpu_+
-    9 root      20   0       0      0      0 S   0.0  0.0   0:00.06 ksoftirqd/0
-   10 root      20   0       0      0      0 I   0.0  0.0   0:00.67 rcu_sched
+    9 root      20   0       0      0      0 S   0.0  0.0   0:00.07 ksoftirqd/0
+   10 root      20   0       0      0      0 I   0.0  0.0   0:01.23 rcu_sched
    11 root      rt   0       0      0      0 S   0.0  0.0   0:00.00 migration/0
    12 root     -51   0       0      0      0 S   0.0  0.0   0:00.00 idle_injec+
-   13 root      20   0       0      0      0 I   0.0  0.0   0:00.21 kworker/0:+
+   13 root      20   0       0      0      0 I   0.0  0.0   0:00.45 kworker/0:+
    14 root      20   0       0      0      0 S   0.0  0.0   0:00.00 cpuhp/0
    15 root      20   0       0      0      0 S   0.0  0.0   0:00.00 cpuhp/1
    16 root     -51   0       0      0      0 S   0.0  0.0   0:00.00 idle_injec+
    17 root      rt   0       0      0      0 S   0.0  0.0   0:00.00 migration/1
-   18 root      20   0       0      0      0 S   0.0  0.0   0:00.05 ksoftirqd/1
+   18 root      20   0       0      0      0 S   0.0  0.0   0:00.06 ksoftirqd/1
    20 root       0 -20       0      0      0 I   0.0  0.0   0:00.00 kworker/1:+
    21 root      20   0       0      0      0 S   0.0  0.0   0:00.00 kdevtmpfs
    22 root       0 -20       0      0      0 I   0.0  0.0   0:00.00 netns
@@ -45,8 +42,7 @@ KiB Swap:   969960 total,   969436 free,      524 used.   623076 avail Mem
    37 root       0 -20       0      0      0 I   0.0  0.0   0:00.00 edac-poller
    38 root       0 -20       0      0      0 I   0.0  0.0   0:00.00 devfreq_wq
    39 root      rt   0       0      0      0 S   0.0  0.0   0:00.00 watchdogd
-   40 root      20   0       0      0      0 I   0.0  0.0   0:00.03 kworker/1:+
-   44 root      20   0       0      0      0 S   0.0  0.0   0:00.14 kswapd0
+   44 root      20   0       0      0      0 S   0.0  0.0   0:00.22 kswapd0
    45 root       0 -20       0      0      0 I   0.0  0.0   0:00.00 kworker/u5+
    46 root      20   0       0      0      0 S   0.0  0.0   0:00.00 ecryptfs-k+
   135 root       0 -20       0      0      0 I   0.0  0.0   0:00.00 kthrotld
@@ -58,14 +54,13 @@ KiB Swap:   969960 total,   969436 free,      524 used.   623076 avail Mem
   143 root       0 -20       0      0      0 I   0.0  0.0   0:00.00 ipv6_addrc+
   154 root       0 -20       0      0      0 I   0.0  0.0   0:00.00 kstrp
   173 root       0 -20       0      0      0 I   0.0  0.0   0:00.00 charger_ma+
-  209 root      20   0       0      0      0 I   0.0  0.0   0:00.28 kworker/1:+
   211 root      20   0       0      0      0 S   0.0  0.0   0:00.00 scsi_eh_2
   212 root       0 -20       0      0      0 I   0.0  0.0   0:00.00 scsi_tmf_2
-  214 root       0 -20       0      0      0 I   0.0  0.0   0:00.17 kworker/0:+
-  215 root       0 -20       0      0      0 I   0.0  0.0   0:00.28 kworker/1:+
-  236 root      20   0       0      0      0 S   0.0  0.0   0:00.03 jbd2/sda1-8
+  214 root       0 -20       0      0      0 I   0.0  0.0   0:00.19 kworker/0:+
+  215 root       0 -20       0      0      0 I   0.0  0.0   0:00.30 kworker/1:+
+  236 root      20   0       0      0      0 S   0.0  0.0   0:00.05 jbd2/sda1-8
   237 root       0 -20       0      0      0 I   0.0  0.0   0:00.00 ext4-rsv-c+
-  286 root      19  -1   95092  15584  14644 S   0.0  0.8   0:00.29 systemd-jo+
+  286 root      19  -1   95092  15728  14776 S   0.0  0.8   0:00.32 systemd-jo+
   296 root      20   0       0      0      0 I   0.0  0.0   0:00.00 kworker/0:+
   299 root      20   0   46824   4804   3172 S   0.0  0.2   0:00.22 systemd-ud+
   319 root       0 -20       0      0      0 S   0.0  0.0   0:00.00 loop0
@@ -79,7 +74,7 @@ KiB Swap:   969960 total,   969436 free,      524 used.   623076 avail Mem
   367 root       0 -20       0      0      0 S   0.0  0.0   0:00.00 loop8
   377 root       0 -20       0      0      0 S   0.0  0.0   0:00.00 loop9
   390 root       0 -20       0      0      0 S   0.0  0.0   0:00.00 loop10
-  392 systemd+  20   0   70752   6188   5504 S   0.0  0.3   0:00.08 systemd-re+
+  392 systemd+  20   0   70752   6188   5504 S   0.0  0.3   0:00.09 systemd-re+
   400 root       0 -20       0      0      0 S   0.0  0.0   0:00.00 loop11
   410 root       0 -20       0      0      0 S   0.0  0.0   0:00.00 loop12
   413 root       0 -20       0      0      0 I   0.0  0.0   0:00.00 iprt-VBoxW+
@@ -88,44 +83,44 @@ KiB Swap:   969960 total,   969436 free,      524 used.   623076 avail Mem
   428 root       0 -20       0      0      0 S   0.0  0.0   0:00.00 loop15
   432 root       0 -20       0      0      0 S   0.0  0.0   0:00.10 loop16
   439 root       0 -20       0      0      0 S   0.0  0.0   0:00.00 loop17
-  450 root     -51   0       0      0      0 S   0.0  0.0   0:00.19 irq/18-vmw+
+  450 root     -51   0       0      0      0 S   0.0  0.0   0:00.41 irq/18-vmw+
   457 root       0 -20       0      0      0 I   0.0  0.0   0:00.00 ttm_swap
-  489 syslog    20   0  263032   4448   3676 S   0.0  0.2   0:00.05 rsyslogd
-  491 avahi     20   0   47252   3168   2828 S   0.0  0.2   0:00.04 avahi-daem+
-  492 root      20   0    4548    836    772 S   0.0  0.0   0:00.05 acpid
+  489 syslog    20   0  263032   4448   3676 S   0.0  0.2   0:00.06 rsyslogd
+  491 avahi     20   0   47252   3168   2828 S   0.0  0.2   0:00.05 avahi-daem+
+  492 root      20   0    4548    836    772 S   0.0  0.0   0:00.13 acpid
   493 root      20   0  503364  11592   9128 S   0.0  0.6   0:00.15 udisksd
   497 avahi     20   0   47072    340      0 S   0.0  0.0   0:00.00 avahi-daem+
-  500 root      20   0   70720   6024   5308 S   0.0  0.3   0:00.11 systemd-lo+
+  500 root      20   0   70720   6024   5308 S   0.0  0.3   0:00.13 systemd-lo+
   506 root      20   0  434324   9652   8244 S   0.0  0.5   0:00.08 ModemManag+
-  525 root      20   0  296336   7284   6340 S   0.0  0.4   0:00.06 accounts-d+
-  535 root      20   0  110408   2056   1836 S   0.0  0.1   0:00.02 irqbalance
+  525 root      20   0  296336   7284   6340 S   0.0  0.4   0:00.07 accounts-d+
+  535 root      20   0  110408   2056   1836 S   0.0  0.1   0:00.04 irqbalance
   544 root      20   0   39712   3180   2892 S   0.0  0.2   0:00.00 cron
   558 root      20   0  108968   8088   6808 S   0.0  0.4   0:00.02 cupsd
-  564 message+  20   0   51500   5904   3912 S   0.0  0.3   0:00.67 dbus-daemon
-  580 root      20   0   45224   5476   4940 S   0.0  0.3   0:00.02 wpa_suppli+
-  581 root      20   0  641160  17052  14156 S   0.0  0.8   0:00.23 NetworkMan+
+  564 message+  20   0   51500   5904   3912 S   0.0  0.3   0:00.73 dbus-daemon
+  580 root      20   0   45224   5476   4940 S   0.0  0.3   0:00.03 wpa_suppli+
+  581 root      20   0  641160  17060  14156 S   0.0  0.8   0:00.24 NetworkMan+
   585 lp        20   0   86408   6032   5220 S   0.0  0.3   0:00.00 dbus
   586 root      20   0  178916  17192   9300 S   0.0  0.8   0:00.17 networkd-d+
   587 lp        20   0   86408   6052   5236 S   0.0  0.3   0:00.00 dbus
-  589 root      20   0 1006300  25692  13992 S   0.0  1.3   0:01.99 snapd
+  589 root      20   0 1006300  25636  13992 S   0.0  1.3   0:02.03 snapd
   606 root      20   0  305064   9816   6780 S   0.0  0.5   0:00.21 polkitd
   607 root      20   0  303520  10772   9336 S   0.0  0.5   0:00.04 cups-brows+
   630 root      20   0  195628  20268  12364 S   0.0  1.0   0:00.14 unattended+
   661 root      20   0   25988   6332   5072 S   0.0  0.3   0:00.01 dhclient
   701 whoopsie  20   0  388440  12396  10772 S   0.0  0.6   0:00.04 whoopsie
-  703 kernoops  20   0   56936    420      0 S   0.0  0.0   0:00.00 kerneloops
-  707 kernoops  20   0   56936    424      0 S   0.0  0.0   0:00.00 kerneloops
+  703 kernoops  20   0   56936    420      0 S   0.0  0.0   0:00.01 kerneloops
+  707 kernoops  20   0   56936    424      0 S   0.0  0.0   0:00.01 kerneloops
  1125 root      20   0  134220    400      8 S   0.0  0.0   0:00.00 VBoxClient
  1126 root      20   0  134220   2316   1872 S   0.0  0.1   0:00.00 VBoxClient
  1141 root      20   0  309800   8516   7300 S   0.0  0.4   0:00.02 gdm3
- 1146 root      20   0  257488   2584   2216 S   0.0  0.1   0:00.09 VBoxService
+ 1146 root      20   0  257488   2584   2216 S   0.0  0.1   0:00.21 VBoxService
  1163 root      20   0  273456   8568   7320 S   0.0  0.4   0:00.02 gdm-sessio+
  1167 taehwan   20   0   77008   8184   6728 S   0.0  0.4   0:00.08 systemd
  1168 taehwan   20   0  113984   2540     36 S   0.0  0.1   0:00.00 (sd-pam)
- 1181 taehwan   20   0  290012   7344   6384 S   0.0  0.4   0:00.04 gnome-keyr+
+ 1181 taehwan   20   0  290012   7344   6384 S   0.0  0.4   0:00.05 gnome-keyr+
  1185 taehwan   20   0  213588   6028   5416 S   0.0  0.3   0:00.00 gdm-x-sess+
- 1187 taehwan   20   0  614960 127964  63952 S   0.0  6.3   0:30.40 Xorg
- 1194 taehwan   20   0   50768   5048   3772 S   0.0  0.2   0:00.33 dbus-daemon
+ 1187 taehwan   20   0  607320 120268  61592 S   0.0  5.9   1:04.25 Xorg
+ 1194 taehwan   20   0   50768   5048   3772 S   0.0  0.2   0:00.38 dbus-daemon
  1198 taehwan   20   0  561328  14876  12280 S   0.0  0.7   0:00.22 gnome-sess+
  1296 taehwan   20   0   63364    340      8 S   0.0  0.0   0:00.00 VBoxClient
  1297 taehwan   20   0  131752   4444   3912 S   0.0  0.2   0:00.00 VBoxClient
@@ -134,75 +129,81 @@ KiB Swap:   969960 total,   969436 free,      524 used.   623076 avail Mem
  1314 taehwan   20   0   63364    336      8 S   0.0  0.0   0:00.00 VBoxClient
  1315 taehwan   20   0  129548   2200   1820 S   0.0  0.1   0:00.00 VBoxClient
  1321 taehwan   20   0   63364    332      8 S   0.0  0.0   0:00.00 VBoxClient
- 1322 taehwan   20   0  130064   2160   1784 S   0.0  0.1   0:01.12 VBoxClient
+ 1322 taehwan   20   0  130064   2160   1784 S   0.0  0.1   0:02.30 VBoxClient
  1334 taehwan   20   0   11300    320      0 S   0.0  0.0   0:00.00 ssh-agent
  1338 taehwan   20   0  349288   6388   5752 S   0.0  0.3   0:00.01 at-spi-bus+
- 1343 taehwan   20   0   49920   4360   3892 S   0.0  0.2   0:00.06 dbus-daemon
- 1346 taehwan   20   0  220776   6920   6216 S   0.0  0.3   0:00.19 at-spi2-re+
- 1373 root      20   0  323864   8636   7524 S   0.0  0.4   0:00.05 upowerd
- 1383 taehwan   20   0  293464   7352   6444 S   0.0  0.4   0:00.03 gvfsd
+ 1343 taehwan   20   0   49920   4360   3892 S   0.0  0.2   0:00.10 dbus-daemon
+ 1346 taehwan   20   0  220776   6920   6216 S   0.0  0.3   0:00.36 at-spi2-re+
+ 1367 taehwan   20   0 3551920 329188 125684 S   0.0 16.1   2:44.21 gnome-shell
+ 1373 root      20   0  323864   8636   7524 S   0.0  0.4   0:00.06 upowerd
+ 1383 taehwan   20   0  293464   7352   6444 S   0.0  0.4   0:00.04 gvfsd
  1388 taehwan   20   0  416112   5348   4816 S   0.0  0.3   0:00.01 gvfsd-fuse
- 1399 taehwan    9 -11 1435912  12400   9192 S   0.0  0.6   0:00.24 pulseaudio
- 1400 rtkit     21   1  183500   3056   2788 S   0.0  0.1   0:00.01 rtkit-daem+
- 1412 taehwan   20   0  363092   8260   6720 S   0.0  0.4   0:01.89 ibus-daemon
+ 1399 taehwan    9 -11 1435912  12408   9196 S   0.0  0.6   0:00.37 pulseaudio
+ 1400 rtkit     21   1  183500   3056   2788 S   0.0  0.1   0:00.02 rtkit-daem+
+ 1412 taehwan   20   0  363212   8300   6720 S   0.0  0.4   0:04.25 ibus-daemon
  1416 taehwan   20   0  282348   6876   6204 S   0.0  0.3   0:00.01 ibus-dconf
- 1418 taehwan   20   0  346080  21176  16464 S   0.0  1.0   0:00.17 ibus-x11
- 1421 taehwan   20   0  280292   6288   5848 S   0.0  0.3   0:00.03 ibus-portal
+ 1418 taehwan   20   0  346080  21176  16464 S   0.0  1.0   0:00.23 ibus-x11
+ 1421 taehwan   20   0  280292   6288   5848 S   0.0  0.3   0:00.04 ibus-portal
  1430 taehwan   20   0  273164   5008   4572 S   0.0  0.2   0:00.00 xdg-permis+
  1435 taehwan   20   0  689888  20832  17632 S   0.0  1.0   0:00.08 gnome-shel+
  1439 taehwan   20   0  693940  25644  21720 S   0.0  1.3   0:00.14 evolution-+
  1447 taehwan   20   0  781160  31712  26192 S   0.0  1.6   0:00.08 goa-daemon
- 1456 taehwan   20   0  378836   7628   6752 S   0.0  0.4   0:00.03 goa-identi+
+ 1456 taehwan   20   0  378836   7628   6752 S   0.0  0.4   0:00.05 goa-identi+
  1465 root      20   0  298444   6916   6176 S   0.0  0.3   0:00.04 boltd
- 1467 taehwan   20   0  187904   5040   4376 S   0.0  0.2   0:00.01 dconf-serv+
+ 1467 taehwan   20   0  187904   5056   4376 S   0.0  0.2   0:00.01 dconf-serv+
  1473 taehwan   20   0  381844   8508   6896 S   0.0  0.4   0:00.13 gvfs-udisk+
  1477 taehwan   20   0  380304   7644   6772 S   0.0  0.4   0:00.00 gvfs-afc-v+
  1482 taehwan   20   0  290120   6700   5920 S   0.0  0.3   0:00.00 gvfs-gphot+
  1486 taehwan   20   0  275536   5924   5356 S   0.0  0.3   0:00.01 gvfs-goa-v+
  1490 taehwan   20   0  277332   5036   4580 S   0.0  0.2   0:00.00 gvfs-mtp-v+
- 1494 root      20   0  523540  60396  13084 S   0.0  3.0   0:14.65 packagekitd
- 1495 taehwan   20   0  592928  22736  17516 S   0.0  1.1   0:00.23 gsd-power
+ 1494 root      20   0  523540  60396  13084 S   0.0  3.0   0:14.66 packagekitd
+ 1495 taehwan   20   0  592928  22736  17516 S   0.0  1.1   0:00.27 gsd-power
  1496 taehwan   20   0  350820  10416   9072 S   0.0  0.5   0:00.02 gsd-print-+
  1499 taehwan   20   0  424844   5864   5220 S   0.0  0.3   0:00.01 gsd-rfkill
  1504 taehwan   20   0  277232   5784   5200 S   0.0  0.3   0:00.00 gsd-screen+
  1507 taehwan   20   0  454500   9228   7956 S   0.0  0.5   0:00.02 gsd-sharing
  1511 taehwan   20   0  379604   8280   7468 S   0.0  0.4   0:00.02 gsd-smartc+
  1516 taehwan   20   0  334520   8436   7456 S   0.0  0.4   0:00.01 gsd-sound
- 1525 taehwan   20   0  496612  22560  17296 S   0.0  1.1   0:00.23 gsd-xsetti+
- 1526 taehwan   20   0  430584  21588  16596 S   0.0  1.1   0:00.19 gsd-wacom
+ 1525 taehwan   20   0  496612  22560  17296 S   0.0  1.1   0:00.29 gsd-xsetti+
+ 1526 taehwan   20   0  430584  21588  16596 S   0.0  1.1   0:00.23 gsd-wacom
  1535 taehwan   20   0  279820   5900   5352 S   0.0  0.3   0:00.00 gsd-a11y-s+
- 1536 taehwan   20   0  345748  20668  15960 S   0.0  1.0   0:00.18 gsd-clipbo+
- 1542 taehwan   20   0  660888  22304  17260 S   0.0  1.1   0:00.25 gsd-color
+ 1536 taehwan   20   0  345748  20668  15960 S   0.0  1.0   0:00.22 gsd-clipbo+
+ 1542 taehwan   20   0  660892  22308  17264 S   0.0  1.1   0:00.35 gsd-color
  1543 taehwan   20   0  471388  13684  11816 S   0.0  0.7   0:00.03 gsd-dateti+
- 1545 taehwan   20   0  366112   7400   6636 S   0.0  0.4   0:00.03 gsd-housek+
- 1546 taehwan   20   0  508644  22196  17296 S   0.0  1.1   0:00.20 gsd-keyboa+
- 1547 taehwan   20   0 1081624  24172  18832 S   0.0  1.2   0:00.22 gsd-media-+
+ 1545 taehwan   20   0  366112   7400   6636 S   0.0  0.4   0:00.05 gsd-housek+
+ 1546 taehwan   20   0  508648  22184  17284 S   0.0  1.1   0:00.25 gsd-keyboa+
+ 1547 taehwan   20   0 1081628  24208  18844 S   0.0  1.2   0:00.29 gsd-media-+
  1550 taehwan   20   0  279824   5880   5332 S   0.0  0.3   0:00.00 gsd-mouse
  1568 taehwan   20   0  510260  12416  10696 S   0.0  0.6   0:00.02 gsd-printer
  1583 colord    20   0  326460  13988   9248 S   0.0  0.7   0:00.14 colord
  1608 taehwan   20   0  271932   6012   4956 S   0.0  0.3   0:00.01 gsd-disk-u+
- 1618 taehwan   20   0  996884  59456  44528 S   0.0  2.9   0:01.75 nautilus-d+
+ 1618 taehwan   20   0  996888  59456  44528 S   0.0  2.9   0:02.42 nautilus-d+
  1653 taehwan   20   0  369900   7548   6452 S   0.0  0.4   0:00.02 gvfsd-trash
  1672 taehwan   20   0  893908  67452  27536 S   0.0  3.3   0:00.61 evolution-+
  1686 taehwan   20   0 1137592  62948  23980 S   0.0  3.1   0:00.54 evolution-+
- 1689 taehwan   20   0  211516   7452   6156 S   0.0  0.4   0:00.61 ibus-engin+
+ 1689 taehwan   20   0  211516   7452   6156 S   0.0  0.4   0:01.25 ibus-engin+
  1703 taehwan   20   0  734540  24896  21460 S   0.0  1.2   0:00.06 evolution-+
  1712 taehwan   20   0 1018988  26400  22876 S   0.0  1.3   0:00.08 evolution-+
  1734 taehwan   20   0  205968   5920   5332 S   0.0  0.3   0:00.00 gvfsd-meta+
- 1761 taehwan   20   0  847180  46556  33024 S   0.0  2.3   0:03.54 gnome-term+
- 1771 taehwan   20   0   31116   5492   3760 S   0.0  0.3   0:00.07 bash
- 1787 taehwan   20   0 1231868 136488 100696 S   0.0  6.7   0:12.21 code
- 1790 taehwan   20   0  374864  38188  31764 S   0.0  1.9   0:00.04 code
- 1815 taehwan   20   0  599860 120620  91464 S   0.0  5.9   0:15.19 code
- 1829 taehwan   20   0 1136468 264408 121992 S   0.0 13.0   0:50.36 code
- 1863 taehwan   20   0  748908 107156  82048 S   0.0  5.3   0:01.86 code
- 1901 taehwan   20   0  584668  65208  45536 S   0.0  3.2   0:01.09 code
- 1930 taehwan   20   0  690720  29076  22916 S   0.0  1.4   0:00.20 update-not+
- 1932 taehwan   20   0 1452316 185320  42712 S   0.0  9.1   0:06.05 gnome-soft+
- 1956 root      20   0  559452  24384  14300 S   0.0  1.2   0:00.37 fwupd
+ 1930 taehwan   20   0  690724  29076  22916 S   0.0  1.4   0:00.28 update-not+
+ 1932 taehwan   20   0 1452316 185320  42712 S   0.0  9.1   0:06.14 gnome-soft+
+ 1956 root      20   0  559452  24384  14300 S   0.0  1.2   0:00.39 fwupd
  2042 taehwan   20   0 1007528  32904  27156 S   0.0  1.6   0:00.06 deja-dup-m+
- 2107 taehwan   20   0   30984   4852   3260 S   0.0  0.2   0:00.03 bash
- 2124 taehwan   20   0   31244   5580   3832 S   0.0  0.3   0:00.08 bash
- 2297 root      20   0       0      0      0 I   0.0  0.0   0:00.02 kworker/u4+
- 2324 taehwan   20   0    4508    752    688 S   0.0  0.0   0:00.02 server
- 2378 taehwan   20   0    4624    880    812 S   0.0  0.0   0:00.00 sh
+ 2386 root      20   0       0      0      0 I   0.0  0.0   0:00.08 kworker/u4+
+ 2417 root      20   0       0      0      0 I   0.0  0.0   0:00.00 kworker/1:+
+ 2499 taehwan   20   0  846080  46400  32924 S   0.0  2.3   0:05.08 gnome-term+
+ 2509 taehwan   20   0   32084   6500   3872 S   0.0  0.3   0:00.11 bash
+ 2556 taehwan   20   0 1226476 133816  99172 S   0.0  6.6   0:09.49 code
+ 2560 taehwan   20   0  374864  38460  32036 S   0.0  1.9   0:00.02 code
+ 2587 taehwan   20   0  591428 115532  86532 S   0.0  5.7   0:12.39 code
+ 2600 taehwan   20   0 1129496 255640 116444 S   0.0 12.5   0:41.37 code
+ 2637 taehwan   20   0  660532  95276  50128 S   0.0  4.7   0:01.74 code
+ 2655 taehwan   20   0  582364  65508  45820 S   0.0  3.2   0:00.66 code
+ 2667 taehwan   20   0  747968 107236  82152 S   0.0  5.3   0:01.20 code
+ 2704 root      20   0       0      0      0 I   0.0  0.0   0:00.25 kworker/u4+
+ 2710 root      20   0       0      0      0 I   0.0  0.0   0:00.11 kworker/1:+
+ 2771 taehwan   20   0   31244   5580   3832 S   0.0  0.3   0:00.08 bash
+ 2871 root      20   0       0      0      0 I   0.0  0.0   0:00.37 kworker/u4+
+ 2903 taehwan   20   0    4508    800    736 S   0.0  0.0   0:00.00 server
+ 2904 taehwan   20   0    4508    740    676 S   0.0  0.0   0:00.00 client
+ 2907 taehwan   20   0    4624    860    792 S   0.0  0.0   0:00.00 sh

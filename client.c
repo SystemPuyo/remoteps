@@ -56,7 +56,6 @@ while(1){
 	send(s, &sel, sizeof(int), 0);
 	//서버로 입력한 값을 보낸다.
 
-	
 	switch(sel){
 		case 1:
 		//kill_ps();
@@ -78,6 +77,8 @@ while(1){
 		exit(1);
 	}
 }
+/*
+//여기 밑을 detail_ps로 넘겨도 될 듯
     inet_ntop(AF_INET, & servaddr.sin_addr.s_addr, server_ip, sizeof(server_ip));
     printf("IP : %s ", server_ip);
     printf("Port : %x ", ntohs(servaddr.sin_port));
@@ -105,6 +106,7 @@ while(1){
 
     }
 	printf("\n");
+	//여기까지*/
 }
 
 int display_menu(void) {

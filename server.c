@@ -66,13 +66,12 @@ int main(int argc, char * argv[]) {
    while(1){   
       printf("명령어를 기다리고 있습니다.\n");
       recv(accp_sock, &sel, sizeof(int), 0);
-      /*
-      if(sel == 1)
-      printf("kill process\n");
-      *///여기는 클라이언트에서 입력을 넘기면 그 입력 된 숫자를 받음 
+      //여기는 클라이언트에서 입력을 넘기면 그 입력 된 숫자를 받음 
+
       if(sel == 5)
         break;
 
+      if(sel == 2){
       system("top -b -n 1 > top.txt");
     
       filenamesize = strlen("top.txt");
@@ -96,8 +95,9 @@ int main(int argc, char * argv[]) {
         printf("processing :%4.2f%%\r", total * 100 / (float) filesize);
         usleep(10000);
       }
-     printf("\n");
-     total = 0;
+       printf("\n");
+       total = 0;
+      }
      //do something later
     }
 
