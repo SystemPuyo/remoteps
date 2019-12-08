@@ -49,31 +49,35 @@ int main(int argc, char * argv[]){
   //연결 되었으면 수신 준비
     puts("서버와 연결됨..");
 
-/*
-	scanf("%d", &sel);
-	send(s, &sel, sizeof(int), 0);
-*/	//서버로 입력한 값을 보낸다.
-/*
+while(1){
 	sel = display_menu();
+
+	//scanf("%d", &sel);
+	send(s, &sel, sizeof(int), 0);
+	//서버로 입력한 값을 보낸다.
+
+	
 	switch(sel){
 		case 1:
-		kill_ps();
+		//kill_ps();
 		break;
 		case 2:
-		detail_ps();
+		//detail_ps();
 		break;
 		case 3:
-		hardware_info();
+		//hardware_info();
 		break;
 		case 4:
-		get_history();
+		//get_history();
 		break;
 		case 5:
-		program_exit();
+		printf("프로그램을 종료하겠습니다.\n");
+		return 0;
 		default:
 		fprintf(stderr, "input error\n");
 		exit(1);
-	}*/
+	}
+}
     inet_ntop(AF_INET, & servaddr.sin_addr.s_addr, server_ip, sizeof(server_ip));
     printf("IP : %s ", server_ip);
     printf("Port : %x ", ntohs(servaddr.sin_port));
@@ -116,6 +120,7 @@ int display_menu(void) {
 		printf("\n\t\t\t=\t2) %s\t\t=", "Show detail ps");
 		printf("\n\t\t\t=\t3) %s\t\t=", "Show hardware info");
 		printf("\n\t\t\t=\t4) %s\t\t=", "Show process use history");
+		printf("\n\t\t\t=\t5) %s\t\t=", "exit");
 		printf("\n\t\t\t=========================================");
 		printf("\n\t\t\t=> ");
 		scanf("%s", input);
@@ -123,7 +128,7 @@ int display_menu(void) {
 		if (strlen(input) != 1) { // some wrong input(not int) ex) abcd, 1abcd, 2!af43 ...
 			continue;
 		}
-		if (menu < 1 || menu > 4) { // int input, but not in menu number
+		if (menu < 1 || menu > 5) { // int input, but not in menu number
 			continue;
 		}
 		else {

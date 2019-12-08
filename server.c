@@ -62,15 +62,16 @@ int main(int argc, char * argv[]) {
     printf("IP : %s ", cli_ip);
     printf("Port : %x \n", ntohs(cliaddr.sin_port));
     
-    while(1){
-
-      /*
+    
+   while(1){   
       printf("명령어를 기다리고 있습니다.\n");
       recv(accp_sock, &sel, sizeof(int), 0);
-
+      /*
       if(sel == 1)
-      printf("1\n");
-      *///여기는 클라이언트에서 입력을 넘기면 그 입력 된 숫자를 받음
+      printf("kill process\n");
+      *///여기는 클라이언트에서 입력을 넘기면 그 입력 된 숫자를 받음 
+      if(sel == 5)
+        break;
 
       system("top -b -n 1 > top.txt");
     
@@ -99,5 +100,8 @@ int main(int argc, char * argv[]) {
      total = 0;
      //do something later
     }
+
+
+printf("접속을 종료합니다.\n");
 return 0;
 }
