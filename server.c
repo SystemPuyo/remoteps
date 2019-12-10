@@ -37,7 +37,9 @@ int main(int argc, char * argv[]) {
         //여기는 클라이언트에서 입력을 넘기면 그 입력 된 숫자를 받음 
         switch (sel) {
         case 1:
-
+            recv(accp_sock,&sel,sizeof(int),0);
+            sprintf(systemarg,"ps -9 %d",sel);
+            system(systemarg);
             break;
         case 2: //top 만들어서 클라로 보내주기
             sprintf(filename, "top%d.txt", topcnt++);

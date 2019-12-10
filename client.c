@@ -7,6 +7,7 @@
 #include<unistd.h>
 #include<fcntl.h>
 #include<arpa/inet.h>
+#include<math.h>
 
 #define MAXLINE 127
 int display_menu();
@@ -15,14 +16,14 @@ void detail_ps();
 void hardware_info();
 void get_history();
 void program_exit();
+void get_file();
 
 int main(int argc, char * argv[]){
 	struct sockaddr_in servaddr;
 	int s, nbyte;
-	char filename[20];
-	char buf[MAXLINE+1],server_ip[20];
-	int filesize, fp, filenamesize;
-	int sread, total = 0;
+    int kill_pid;
+	char filename[20],kill_ps_name[30];
+	int  filenamesize;
 	int sel = 0;
 	if(argc !=3){
 		printf("usage : %s ip_address port",argv[0]);
@@ -49,64 +50,43 @@ int main(int argc, char * argv[]){
   //연결 되었으면 수신 준비
     puts("서버와 연결됨..");
 
-while(1){
-	sel = display_menu();
+    while(1){
+	    sel = display_menu();
 
-	//scanf("%d", &sel);
-	send(s, &sel, sizeof(int), 0);
-	//서버로 입력한 값을 보낸다.
-
-	switch(sel){
-		case 1:
-		//kill_ps();
-		break;
-		case 2:
-		//detail_ps();
-		break;
-		case 3:
-		//hardware_info();
-		break;
-		case 4:
-		//get_history();
-		break;
-		case 5:
-		printf("프로그램을 종료하겠습니다.\n");
-		return 0;
-		default:
-		fprintf(stderr, "input error\n");
-		exit(1);
-	}
-}
-/*
-//여기 밑을 detail_ps로 넘겨도 될 듯
-    inet_ntop(AF_INET, & servaddr.sin_addr.s_addr, server_ip, sizeof(server_ip));
-    printf("IP : %s ", server_ip);
-    printf("Port : %x ", ntohs(servaddr.sin_port));
-
-    bzero(filename, 20);
-    recv(s, filename, sizeof(filename), 0);
-    printf("%s ", filename);
-
-    // recv( accp_sock, &filesize, sizeof(filesize), 0 );
-    read(s, & filesize, sizeof(filesize));
-    printf("%d ", filesize);
-
-    strcat(filename, "_backup");
-    fp = open(filename, O_WRONLY | O_CREAT | O_TRUNC);
-
-    printf("file is receiving now.. \n");
-    while (total != filesize) {
-      sread = recv(s, buf, 100, 0);
-      total += sread;
-      buf[sread] = 0;
-      write(fp, buf, sread);
-      bzero(buf, sizeof(buf));
-      printf("processing : %4.2f\r%%", total * 100 / (float) filesize);
-      usleep(1000);
-
+	    //scanf("%d", &sel);
+	    send(s, &sel, sizeof(int), 0);
+    	//서버로 입력한 값을 보낸다.
+    
+    	switch(sel){
+	    	case 1:
+                printf("Enter pid or process name to kill : ");
+		        scanf("%s",kill_ps_name);
+                if((int)log10(atoi(kill_ps_name)) + 1 == strlen(kill_ps_name)){
+                    //if input was pure integer input
+                    kill_pid = atoi(kill_ps_name);
+                    kill_ps(kill_pid,NULL);//kill by pid
+                }
+                else{
+                    kill_ps(-1,kill_ps_name);//kill by name
+                }
+    		    break;
+	    	case 2:
+		        detail_ps();
+		        break;
+		    case 3:
+		        hardware_info();
+		        break;
+	        case 4:
+		        //get_history();
+		        break;
+		    case 5:
+		        printf("프로그램을 종료하겠습니다.\n");
+		        return 0;
+		    default:
+		        fprintf(stderr, "input error\n");
+		        exit(1);
+	    }
     }
-	printf("\n");
-	//여기까지*/
 }
 
 int display_menu(void) {
@@ -141,20 +121,58 @@ int display_menu(void) {
 	return 0;
 }
 
-void kill_ps (int index, char *psname){
+void kill_ps (int index, char *psname,int s){
 	// kill process by pid or psname
+    if(!psname){//pid가 아니라 psname으로 할려고 할려면ㄴ
+        //psname 에서 pid 찾으려면 따로 작업 해야지
+    }
+    else{
+        //psname을 구하는 코드
+    }
+    send(s,&index,sizeof(index),0);
+    printf("killed process in remote machine. pid : %d, psname : %s",index,psname);
 }
 
 void detail_ps(){
 	// by top command, get deatil info
+    get_file();
 }
 
 void hardware_info(){
 	// by lshw command, get hardware info
 	// and display resource use with progress bar
+    get_file();
 }
 
 void get_history(){
 	// get result of top command by file (by 1s), and find most used program,
 	// most resource reused program by multithreading
+}
+void get_file(struct sockaddr_in servaddr,int s){
+    char filename[20],server_ip[20],buf[MAXLINE+1];
+    int filesize,fp,total = 0,sread;
+    inet_ntop(AF_INET, & servaddr.sin_addr.s_addr, server_ip, sizeof(server_ip));
+    printf("IP : %s ", server_ip);
+    printf("Port : %x ", ntohs(servaddr.sin_port));
+
+    bzero(filename, 20);
+    recv(s, filename, sizeof(filename), 0);
+    printf("%s ", filename);
+
+    // recv( accp_sock, &filesize, sizeof(filesize), 0 );
+    read(s, & filesize, sizeof(filesize));
+    printf("%d ", filesize);
+
+    fp = open(filename, O_WRONLY | O_CREAT | O_TRUNC);
+
+    printf("file is receiving now.. \n");
+    while (total != filesize) {
+      sread = recv(s, buf, 100, 0);
+      total += sread;
+      buf[sread] = 0;
+      write(fp, buf, sread);
+      bzero(buf, sizeof(buf));
+      printf("processing : %4.2f\r%%", total * 100 / (float) filesize);
+    }
+    puts("");
 }
