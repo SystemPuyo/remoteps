@@ -52,8 +52,9 @@ int main(int argc, char * argv[]) {
             break;
 
         case 5:
-            close(accp_sock);
-            accp_sock = init(servaddr,argv[1],listen_sock,cliaddr);
+            exit(0);//임시방편 . 소켓 닫는것좀 구현해줘
+           // close(accp_sock);
+           //accp_sock = init(servaddr,argv[1],listen_sock,cliaddr);
             continue;
         }
         filenamesize = strlen(filename);
