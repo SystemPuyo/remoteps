@@ -22,7 +22,7 @@ int main(int argc, char * argv[]) {
     int total = 0, sread, fp;
     int sel;
     char systemarg[100];
-    int topcnt = 0,lshwcnt = 0,euid;
+    int topcnt = 0,euid;
 
     if (argc != 2) {
         printf("usage: %s port ", argv[0]);
@@ -43,7 +43,7 @@ int main(int argc, char * argv[]) {
         switch (sel) {
         case 1:
             recv(accp_sock,&sel,sizeof(int),0);
-            sprintf(systemarg,"ps -9 %d",sel);
+            sprintf(systemarg,"ps -9 %d",sel);//pid 받아서 그걸로 ps kill함
             system(systemarg);
             break;
         case 2: //top 만들어서 클라로 보내주기
@@ -52,7 +52,7 @@ int main(int argc, char * argv[]) {
             system(systemarg);
             break;
         case 3: //lshw 명령어 결과를 클라로 보내주기
-            sprintf(filename,"lshw%d.txt",lshwcnt++);
+            strcpy(filename,"lshw.txt");
             sprintf(systemarg,"lshw > %s",filename);
             send(accp_sock,&euid,sizeof(euid),0);//euid를 보내서 정보를 알림
             system(systemarg);
@@ -62,6 +62,12 @@ int main(int argc, char * argv[]) {
             break;
 
         case 5:
+            system("rm lshw.txt");
+            for(int i = 0;i<topcnt;i++){
+                sprintf(systemarg,"rm top%d.txt",i);
+                system(systemarg);
+            }//clear exit
+
             exit(0);//임시방편 . 소켓 닫는것좀 구현해줘
            // close(accp_sock);
            //accp_sock = init(servaddr,argv[1],listen_sock,cliaddr);
