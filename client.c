@@ -11,12 +11,13 @@
 
 #define MAXLINE 127
 int display_menu();
-void kill_ps(int, char*);
-void detail_ps();
-void hardware_info();
+void kill_ps(int, char*,int);
+void detail_ps(struct sockaddr_in, int);
+void hardware_info(struct sockaddr_in, int);
 void get_history();
 void program_exit();
-void get_file();
+void get_file(struct sockaddr_in, int,char (*)[20]);
+void read_file(char *);
 
 int main(int argc, char * argv[]){
 	struct sockaddr_in servaddr;
@@ -61,20 +62,20 @@ int main(int argc, char * argv[]){
 	    	case 1:
                 printf("Enter pid or process name to kill : ");
 		        scanf("%s",kill_ps_name);
-                if((int)log10(atoi(kill_ps_name)) + 1 == strlen(kill_ps_name)){
+                if((unsigned long)log10(atoi(kill_ps_name)) + 1 == strlen(kill_ps_name)){
                     //if input was pure integer input
                     kill_pid = atoi(kill_ps_name);
-                    kill_ps(kill_pid,NULL);//kill by pid
+                    kill_ps(kill_pid,NULL,s);//kill by pid
                 }
                 else{
-                    kill_ps(-1,kill_ps_name);//kill by name
+                    kill_ps(-1,kill_ps_name,s);//kill by name
                 }
     		    break;
 	    	case 2:
-		        detail_ps();
+		        detail_ps(servaddr,s);
 		        break;
 		    case 3:
-		        hardware_info();
+		        hardware_info(servaddr,s);
 		        break;
 	        case 4:
 		        //get_history();
@@ -86,6 +87,9 @@ int main(int argc, char * argv[]){
 		        fprintf(stderr, "input error\n");
 		        exit(1);
 	    }
+        printf("press any key to continue...");
+        getchar();
+        getchar();
     }
 }
 
@@ -133,37 +137,40 @@ void kill_ps (int index, char *psname,int s){
     printf("killed process in remote machine. pid : %d, psname : %s",index,psname);
 }
 
-void detail_ps(){
+void detail_ps(struct sockaddr_in servaddr,int s){
 	// by top command, get deatil info
-    get_file();
+    char filename[20];
+    get_file(servaddr, s,&filename);
 }
 
-void hardware_info(){
+void hardware_info(struct sockaddr_in servaddr,int s){
 	// by lshw command, get hardware info
 	// and display resource use with progress bar
-    get_file();
+    int isSudo;
+    char filename[20];
+    recv(s,&isSudo,sizeof(int),0);
+    get_file(servaddr, s,&filename);
 }
 
 void get_history(){
 	// get result of top command by file (by 1s), and find most used program,
 	// most resource reused program by multithreading
 }
-void get_file(struct sockaddr_in servaddr,int s){
-    char filename[20],server_ip[20],buf[MAXLINE+1];
+void get_file(struct sockaddr_in servaddr,int s,char (*filename)[20]){
+    char server_ip[20],buf[MAXLINE+1];
     int filesize,fp,total = 0,sread;
     inet_ntop(AF_INET, & servaddr.sin_addr.s_addr, server_ip, sizeof(server_ip));
     printf("IP : %s ", server_ip);
     printf("Port : %x ", ntohs(servaddr.sin_port));
 
-    bzero(filename, 20);
-    recv(s, filename, sizeof(filename), 0);
-    printf("%s ", filename);
+    recv(s, *filename, 20, 0);
+    printf("%s ", *filename);
 
     // recv( accp_sock, &filesize, sizeof(filesize), 0 );
     read(s, & filesize, sizeof(filesize));
     printf("%d ", filesize);
 
-    fp = open(filename, O_WRONLY | O_CREAT | O_TRUNC);
+    fp = open(*filename, O_WRONLY | O_CREAT | O_TRUNC);
 
     printf("file is receiving now.. \n");
     while (total != filesize) {
@@ -175,4 +182,9 @@ void get_file(struct sockaddr_in servaddr,int s){
       printf("processing : %4.2f\r%%", total * 100 / (float) filesize);
     }
     puts("");
+}
+void read_file(char * filename){
+    char temp[20];//임시 구현
+    sprintf(temp,"cat %s",filename);
+    system(temp);
 }

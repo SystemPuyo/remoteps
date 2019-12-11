@@ -22,7 +22,7 @@ int main(int argc, char * argv[]) {
     int total = 0, sread, fp;
     int sel;
     char systemarg[100];
-    int topcnt = 0;
+    int topcnt = 0,lshwcnt = 0,euid;
 
     if (argc != 2) {
         printf("usage: %s port ", argv[0]);
@@ -30,6 +30,11 @@ int main(int argc, char * argv[]) {
     }
     // 소켓 생성
     // servaddr을 ''으로 초기화
+    euid = geteuid();
+    if(euid != 0 ){
+        puts("현재 일반 유저로 서버 프로그램을 실행하고 있습니다.");
+        puts("sudo 로 실행 하면 더 자세한 lshw를 볼 수 있습니다.");
+    }
     accp_sock = init(servaddr,argv[1],listen_sock,cliaddr);
     while (1) {
         printf("명령어를 기다리고 있습니다.\n");
@@ -47,10 +52,13 @@ int main(int argc, char * argv[]) {
             system(systemarg);
             break;
         case 3: //lshw 명령어 결과를 클라로 보내주기
-
+            sprintf(filename,"lshw%d.txt",lshwcnt++);
+            sprintf(systemarg,"lshw > %s",filename);
+            send(accp_sock,&euid,sizeof(euid),0);//euid를 보내서 정보를 알림
+            system(systemarg);
             break;
         case 4:
-
+            continue;//이건 클라 혼자서 하는 것이니 여기서는 그냥 continue 하자구?
             break;
 
         case 5:
