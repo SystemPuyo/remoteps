@@ -12,18 +12,21 @@
 #include<time.h>
 
 #define MAXLINE 127
-
+struct hw_info{
+	char class[100];
+	char description[300];
+};
 int display_menu();
-void kill_ps(int, char*,int);
+void kill_ps(int, char *, int);
 void get_ps(struct sockaddr_in, int);
-void hardware_info(struct sockaddr_in, int);
+void hardware_info(struct sockaddr_in, int, struct hw_info[], int *);
 void get_history();
 void program_exit();
 void get_file(struct sockaddr_in, int,char (*)[20]);
 void read_file(char *);
 void show_file_list();
 void set_file_list();
-void print_hw_info();
+void print_hw_info(struct hw_info[], int);
 int submenu_2(struct sockaddr_in, int);
 
 int file_amt = 0;
@@ -32,12 +35,14 @@ time_t timeList[40];
 bool isListSet = false;
 
 int main(int argc, char * argv[]){
+	struct hw_info h[100] = {};
 	struct sockaddr_in servaddr;
 	int s, nbyte;
     int kill_pid;
 	char filename[20],kill_ps_name[30];
 	int  filenamesize;
 	int sel = 0;
+	int hw_size = 0;
 	if(argc !=3){
 		printf("usage : %s ip_address port",argv[0]);
 		exit(1);
@@ -87,8 +92,8 @@ int main(int argc, char * argv[]){
                 if(sel == -1) continue;
                 send(s,&sel,sizeof(int),0);
 		        break;
-		    case 3:
-		        hardware_info(servaddr,s);
+		case 3:
+			hardware_info(servaddr, s, h, &hw_size);
 		        break;
 	        case 4:
 		        //get_history();
@@ -103,7 +108,8 @@ int main(int argc, char * argv[]){
 		        fprintf(stderr, "input error\n");
 		        exit(1);
 	    }
-        printf("press any key to continue...");
+	puts("===============================")
+        printf("press any key to continue...\n");
         getchar();
         getchar();
     }
@@ -154,29 +160,61 @@ void kill_ps (int index, char *psname,int s){
         //psname을 구하는 코드
     }
     send(s,&index,sizeof(index),0);
-    printf("killed process in remote machine. pid : %d, psname : %s",index,psname);
+    printf("killed process in remote machine. pid : %d, psname : %s\n",index,psname);
 }
 
 
-void get_ps(struct sockaddr_in servaddr,int s){
+void get_ps(struct sockaddr_in servaddr, int s){
 	// by top command, get deatil info
     char filename[20];
     get_file(servaddr, s,&filename);
     file_amt++;
 }
 
-void hardware_info(struct sockaddr_in servaddr,int s){
+void hardware_info(struct sockaddr_in servaddr, int s, struct hw_info h[], int *count){
 	// by lshw command, get hardware info
 	// and display resource use with progress bar
-    static bool hasInfo = false;
+    static bool hasInfo = false; 
+    FILE *fp = NULL;
     if(hasInfo){
-        print_hw_info();
+        print_hw_info(h, *count);
         return;
     }
+
     int isSudo;
     char filename[20];
+    char str[300];
+    int cnt = 0;
     recv(s,&isSudo,sizeof(int),0);
-    get_file(servaddr, s,&filename);
+    get_file(servaddr, s, &filename);
+    fp = fopen(filename, "r");
+    fscanf(fp, "%s", str);
+    while(!feof(fp)){
+	if (cnt >= 99){
+		break;
+	}
+    	if (!strcmp(str, "processor")) {
+		strcpy(h[cnt].class, "processor");
+		fgets(str, sizeof(str), fp);
+		strcpy(h[cnt].description, str);
+		cnt++;
+	}
+	if (!strcmp(str, "memory")) {
+		strcpy(h[cnt].class, "memory");
+		fgets(str, sizeof(str), fp);
+		strcpy(h[cnt].description, str);
+		cnt++;
+	}
+	if (!strcmp(str, "display")) {
+		strcpy(h[cnt].class, "display");
+		fgets(str, sizeof(str), fp);
+		strcpy(h[cnt].description, str);
+		cnt++;
+	}
+	fscanf(fp, "%s", str);
+
+    }
+    *count = cnt;
     hasInfo = true;
 }
 
@@ -251,8 +289,13 @@ void set_file_list(){
     fclose(fp);
 }
 
-void print_hw_info(){
-    //print hardware info
+void print_hw_info(struct hw_info h[], int size){
+	int i;
+	printf("HW_INFO\n");
+	printf("================================================================\n");
+	for (i = 0; i < size; i++){
+		printf("%s: %s\n", h[i].class, h[i].description);
+	}
 }
 
 int submenu_2( struct sockaddr_in servaddr,int s){

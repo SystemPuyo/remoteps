@@ -96,7 +96,7 @@ int main(int argc, char * argv[]) {
                 sprintf(systemarg,"rm top%d.txt",i);
                 system(systemarg);
             }//clear exit
-
+	    printf("클라이언트가 종료 요청을 보냈습니다.\n종료합니다.\n");
             exit(0);//임시방편 . 소켓 닫는것좀 구현해줘
            // close(accp_sock);
            //accp_sock = init(servaddr,argv[1],listen_sock,cliaddr);
