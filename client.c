@@ -8,16 +8,28 @@
 #include<fcntl.h>
 #include<arpa/inet.h>
 #include<math.h>
+#include<stdbool.h>
+#include<time.h>
 
 #define MAXLINE 127
+
 int display_menu();
 void kill_ps(int, char*,int);
-void detail_ps(struct sockaddr_in, int);
+void get_ps(struct sockaddr_in, int);
 void hardware_info(struct sockaddr_in, int);
 void get_history();
 void program_exit();
 void get_file(struct sockaddr_in, int,char (*)[20]);
 void read_file(char *);
+void show_file_list();
+void set_file_list();
+void print_hw_info();
+int submenu_2(struct sockaddr_in, int);
+
+int file_amt = 0;
+bool isFileSimple[40];
+time_t timeList[40];
+bool isListSet = false;
 
 int main(int argc, char * argv[]){
 	struct sockaddr_in servaddr;
@@ -53,9 +65,8 @@ int main(int argc, char * argv[]){
 
     while(1){
 	    sel = display_menu();
-
-	    //scanf("%d", &sel);
-	    send(s, &sel, sizeof(int), 0);
+        if(sel != 2)
+            send(s, &sel, sizeof(int), 0);
     	//서버로 입력한 값을 보낸다.
     
     	switch(sel){
@@ -72,7 +83,9 @@ int main(int argc, char * argv[]){
                 }
     		    break;
 	    	case 2:
-		        detail_ps(servaddr,s);
+                sel = submenu_2(servaddr,s);
+                if(sel == -1) continue;
+                send(s,&sel,sizeof(int),0);
 		        break;
 		    case 3:
 		        hardware_info(servaddr,s);
@@ -80,9 +93,12 @@ int main(int argc, char * argv[]){
 	        case 4:
 		        //get_history();
 		        break;
-		    case 5:
+            case 5:
+                show_file_list();
+                break;
+		    case -1:
 		        printf("프로그램을 종료하겠습니다.\n");
-		        return 0;
+                return 0;
 		    default:
 		        fprintf(stderr, "input error\n");
 		        exit(1);
@@ -103,14 +119,18 @@ int display_menu(void) {
 		printf("\n\t\t\t\t%16s\n", "PS MENU");
 		printf("\n\t\t\t=================================================");
 		printf("\n\t\t\t=\t1) %-25s\t\t=", "kill process");
-		printf("\n\t\t\t=\t2) %-25s\t\t=", "Show detail ps");
+		printf("\n\t\t\t=\t2) %-25s\t\t=", "Get ps");
 		printf("\n\t\t\t=\t3) %-25s\t\t=", "Show hardware info");
 		printf("\n\t\t\t=\t4) %-25s\t\t=", "Show process use history");
-		printf("\n\t\t\t=\t5) %-25s\t\t=", "exit");
+		printf("\n\t\t\t-\t5) %-25s\t\t=", "Show received top file list");
+        printf("\n\t\t\t=\tq) %-25s\t\t=", "exit");
 		printf("\n\t\t\t=================================================");
 		printf("\n\t\t\t=> ");
 		scanf("%s", input);
-		menu = atoi(input); // to handle some wrong input
+		
+        if(strcmp(input,"q") == 0 || strcmp(input,"Q") == 0)
+            return -1;
+        menu = atoi(input); // to handle some wrong input
 		if (strlen(input) != 1) { // some wrong input(not int) ex) abcd, 1abcd, 2!af43 ...
 			continue;
 		}
@@ -137,19 +157,27 @@ void kill_ps (int index, char *psname,int s){
     printf("killed process in remote machine. pid : %d, psname : %s",index,psname);
 }
 
-void detail_ps(struct sockaddr_in servaddr,int s){
+
+void get_ps(struct sockaddr_in servaddr,int s){
 	// by top command, get deatil info
     char filename[20];
     get_file(servaddr, s,&filename);
+    file_amt++;
 }
 
 void hardware_info(struct sockaddr_in servaddr,int s){
 	// by lshw command, get hardware info
 	// and display resource use with progress bar
+    static bool hasInfo = false;
+    if(hasInfo){
+        print_hw_info();
+        return;
+    }
     int isSudo;
     char filename[20];
     recv(s,&isSudo,sizeof(int),0);
     get_file(servaddr, s,&filename);
+    hasInfo = true;
 }
 
 void get_history(){
@@ -187,4 +215,66 @@ void read_file(char * filename){
     char temp[20];//임시 구현
     sprintf(temp,"cat %s",filename);
     system(temp);
+}
+
+void show_file_list(){
+    set_file_list();
+    printf("받아온 파일들의 리스트\n");
+    for(int i = 0;i<file_amt;i++){
+        printf("%d) ",i+1);
+        printf("%s",ctime(&timeList[i]));
+        if(!isFileSimple[i]){
+            printf(" -detailed");
+        }
+        puts("");
+    }
+}
+
+void set_file_list(){
+    FILE * fp;
+    char line[20];
+    if(isListSet)return;
+    system("ls top*.txt > filelist.txt");
+    fp = fopen("filelist.txt","r");
+    for(int i = 0;i<file_amt;i++){
+        fscanf(fp,"%s",line);
+        if(line[0] == 't'){//if the line is about top
+            sscanf(line,"top%ld.txt",&timeList[i]);
+            isFileSimple[i] = false;
+        }
+        if(line[0] == 'p'){//else the line is about ps
+            sscanf(line,"ps%ld.txt",&timeList[i]);
+            isFileSimple[i] = true;
+        }
+    }
+
+    fclose(fp);
+}
+
+void print_hw_info(){
+    //print hardware info
+}
+
+int submenu_2( struct sockaddr_in servaddr,int s){
+    int menu;
+    char input[20],filename[20];
+    system("clear");
+    printf("\n\t\t\t\t%16s\n", "Get ps MENU");
+	printf("\n\t\t\t=================================================");
+	printf("\n\t\t\t=\t1) %-25s\t\t=", "Get simple ps");
+	printf("\n\t\t\t=\t2) %-25s\t\t=", "Get detail ps");
+    printf("\n\t\t\t=\tq) %-25s\t\t=", "Go Back to main menu");
+    printf("\n\t\t\t=================================================");
+	printf("\n\t\t\t=> ");
+
+    scanf("%s",input);
+    if(strcmp(input,"q") == 0 || strcmp(input,"Q") == 0){
+        return -1;
+    }
+    menu = atoi(input);
+    menu += 20;
+    send(s, &menu, sizeof(int), 0);
+    get_file(servaddr,s,&filename);
+    file_amt++;
+    return menu;
 }

@@ -7,10 +7,32 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <arpa/inet.h>
+#include <time.h>
 
 #define MAXLINE 127
 
 int init(struct sockaddr_in servaddr, char * port, int listen_sock, struct sockaddr_in cliaddr);
+
+void red() {
+	printf("\033[1;31m");
+}
+
+void yellow() {
+	printf("\033[1;33m");
+}
+
+void purple() {
+	printf("\033[0;35m");
+}
+void green() {
+	printf("\033[0;32m");
+}
+void blue() {
+	printf("\033[0;34m");
+}
+void reset() {
+	printf("\033[0m");
+}
 
 int main(int argc, char * argv[]) {
     struct sockaddr_in servaddr, cliaddr;
@@ -32,8 +54,10 @@ int main(int argc, char * argv[]) {
     // servaddr을 ''으로 초기화
     euid = geteuid();
     if(euid != 0 ){
+        red();
         puts("현재 일반 유저로 서버 프로그램을 실행하고 있습니다.");
         puts("sudo 로 실행 하면 더 자세한 lshw를 볼 수 있습니다.");
+        reset();
     }
     accp_sock = init(servaddr,argv[1],listen_sock,cliaddr);
     while (1) {
@@ -46,8 +70,13 @@ int main(int argc, char * argv[]) {
             sprintf(systemarg,"ps -9 %d",sel);//pid 받아서 그걸로 ps kill함
             system(systemarg);
             break;
-        case 2: //top 만들어서 클라로 보내주기
-            sprintf(filename, "top%d.txt", topcnt++);
+        case 21://ps 만들어서 클라로 보내주기
+            sprintf(filename,"ps%ld.txt",time(NULL));
+            sprintf(systemarg, "ps > %s",filename);
+            system(systemarg);
+            break;
+        case 22: //top 만들어서 클라로 보내주기
+            sprintf(filename, "top%ld.txt", time(NULL));
             sprintf(systemarg, "top -b -n 1 > %s", filename);
             system(systemarg);
             break;
@@ -61,7 +90,7 @@ int main(int argc, char * argv[]) {
             continue;//이건 클라 혼자서 하는 것이니 여기서는 그냥 continue 하자구?
             break;
 
-        case 5:
+        case -1:
             system("rm lshw.txt");
             for(int i = 0;i<topcnt;i++){
                 sprintf(systemarg,"rm top%d.txt",i);
