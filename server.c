@@ -72,7 +72,7 @@ int main(int argc, char * argv[]) {
             break;
         case 21://ps 만들어서 클라로 보내주기
             sprintf(filename,"ps%ld.txt",time(NULL));
-            sprintf(systemarg, "ps > %s",filename);
+            sprintf(systemarg, "ps -fa > %s",filename);
             system(systemarg);
             break;
         case 22: //top 만들어서 클라로 보내주기
@@ -82,7 +82,7 @@ int main(int argc, char * argv[]) {
             break;
         case 3: //lshw 명령어 결과를 클라로 보내주기
             strcpy(filename,"lshw.txt");
-            sprintf(systemarg,"lshw > %s",filename);
+            sprintf(systemarg,"lshw -short > %s",filename);
             send(accp_sock,&euid,sizeof(euid),0);//euid를 보내서 정보를 알림
             system(systemarg);
             break;
