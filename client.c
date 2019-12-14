@@ -108,7 +108,7 @@ int main(int argc, char * argv[]){
 		        fprintf(stderr, "input error\n");
 		        exit(1);
 	    }
-	puts("===============================");
+	printf("================================================================\n");
         printf("press any key to continue...\n");
         getchar();
         getchar();
@@ -180,10 +180,12 @@ void hardware_info(struct sockaddr_in servaddr, int s, struct hw_info h[], int *
         print_hw_info(h, *count);
         return;
     }
-
+	
     int isSudo;
     char filename[20];
     char str[300];
+    struct hw_info temp;
+    int i, j;
     int cnt = 0;
     recv(s,&isSudo,sizeof(int),0);
     get_file(servaddr, s, &filename);
@@ -196,23 +198,47 @@ void hardware_info(struct sockaddr_in servaddr, int s, struct hw_info h[], int *
     	if (!strcmp(str, "processor")) {
 		strcpy(h[cnt].class, "processor");
 		fgets(str, sizeof(str), fp);
-		strcpy(h[cnt].description, str);
-		cnt++;
+		if (str[1] == ' '){
+			strcpy(h[cnt].description, str);
+			cnt++;
+		}
+		else{
+			memset(h[cnt].class, '\0', sizeof(h[cnt].class));
+		}
 	}
 	if (!strcmp(str, "memory")) {
 		strcpy(h[cnt].class, "memory");
 		fgets(str, sizeof(str), fp);
-		strcpy(h[cnt].description, str);
-		cnt++;
+		if (str[1] == ' '){
+			strcpy(h[cnt].description, str);
+			cnt++;
+		}
+		else{
+			memset(h[cnt].class, '\0', sizeof(h[cnt].class));
+		}
 	}
 	if (!strcmp(str, "display")) {
 		strcpy(h[cnt].class, "display");
 		fgets(str, sizeof(str), fp);
-		strcpy(h[cnt].description, str);
-		cnt++;
+		if (str[1] == ' '){
+			strcpy(h[cnt].description, str);
+			cnt++;
+		}
+		else {
+			memset(h[cnt].class, '\0', sizeof(h[cnt].class));
+		}
 	}
 	fscanf(fp, "%s", str);
 
+    }
+    for (i = 0; i < cnt - 1; i++){
+    	for (j = 0; j < cnt - 1 - i; j++){
+		if (strcmp(h[j].class, h[j + 1].class) > 0){
+			temp = h[j];
+			h[j] = h[j + 1];
+			h[j + 1] = temp;
+		}
+	}
     }
     *count = cnt;
     hasInfo = true;
@@ -294,10 +320,23 @@ void set_file_list(){
 
 void print_hw_info(struct hw_info h[], int size){
 	int i;
+	int j;
+	int temp;
+	char prev[100] = {'\0', };
 	printf("HW_INFO\n");
 	printf("================================================================\n");
 	for (i = 0; i < size; i++){
-		printf("%s: %s\n", h[i].class, h[i].description);
+		if (!strcmp(prev, h[i].class)){
+			temp = (int)strlen(h[i].class);
+			for (j = 0; j <= temp; j++){
+				printf(" ");
+			}	
+			printf("%s\n", h[i].description);
+		}
+		else{
+			printf("%s:%s\n", h[i].class, h[i].description);
+		}
+		strcpy(prev, h[i].class);
 	}
 }
 
