@@ -38,7 +38,7 @@ void show_file_list();
 void set_file_list();
 void print_hw_info(struct hw_info[], int);
 int submenu_2(struct sockaddr_in, int);
-void make_info(char[]);
+struct PROCESS_INFO* make_info(char[]);
 
 int file_amt = 0;
 bool isFileSimple[40];
@@ -355,6 +355,7 @@ void print_hw_info(struct hw_info h[], int size){
 int submenu_2( struct sockaddr_in servaddr,int s){
     int menu;
     char input[20],filename[20];
+	struct PROCESS_INFO* info; 
     system("clear");
     printf("\n\t\t\t\t%16s\n", "Get ps MENU");
 	printf("\n\t\t\t=================================================");
@@ -369,23 +370,43 @@ int submenu_2( struct sockaddr_in servaddr,int s){
         return -1;
     }
     menu = atoi(input);
-    menu += 20;
+    menu += 20; 
     send(s, &menu, sizeof(int), 0);
     get_file(servaddr,s,&filename);
-	make_info(filename);
+
+	info = make_info(filename);
+
+	for (int i = 0; i < 1000; i++)
+	{
+		if(info[i].pid == 0)
+			break;
+		printf("%d %.1f %.1f %s %s\n", info[i].pid, info[i].cpu_pct, info[i].mem_pct, info[i].run_time, info[i].command);
+	}
+	
+
     isListSet = false;
     return menu;
 }
 
-void make_info(char filename[20]){
+struct PROCESS_INFO* make_info(char filename[20]){
 	char line[120];
 	int pr, ni, virt, res, shr;
 	char s;
 	char user[20];
 	int cur = 0;
+	struct PROCESS_INFO* temp = (struct PROCESS_INFO*)malloc(sizeof(struct PROCESS_INFO)*1000);
 
-	FILE* fp = fopen(filename, "r");
-	FILE* rf = fopen("temp.txt", "w");
+	for (int i = 0; i < 1000; i++)
+	{
+		temp[i].pid = 0;
+		temp[i].mem_pct = 0.0f;
+		temp[i].cpu_pct = 0.0f;
+		temp[i].run_time[0] = '\0';
+		temp[i].command[0] = '\0';
+	}	//초기화
+	
+
+	FILE* fp = fopen(filename, "r");	
 	if(fp == NULL){
 		fprintf(stderr, "파일 열기 에러");
 		exit(1);
@@ -396,10 +417,10 @@ void make_info(char filename[20]){
 			break;
 
 			if(isdigit(line[4]) != 0){ //%5d로 되어 있어서 5번째 칸이 숫자인지 확인
-				sscanf(line, "%d %s %d %d %d %d %d %c %f %f %s %s", &(process[cur].pid), user, &pr, &ni, &virt, &res, &shr, &s, &(process[cur].cpu_pct), &(process[cur].mem_pct), process[cur].run_time, process[cur].command);
-				//fprintf(rf, "%d %s %d %d %d %d %d %c %f %f %s %s\n", process[cur].pid, user, pr, ni, virt, res, shr, s, process[cur].cpu_pct, process[cur].mem_pct, process[cur].run_time, process[cur].command);	//확인용
-					cur++;
+				sscanf(line, "%d %s %d %d %d %d %d %c %f %f %s %s", &(temp[cur].pid), user, &pr, &ni, &virt, &res, &shr, &s, &(temp[cur].cpu_pct), &(temp[cur].mem_pct), temp[cur].run_time, temp[cur].command);
+				cur++;
 			}
 	}
-	return;
+	fclose(fp);
+	return temp;
 }
