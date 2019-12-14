@@ -77,7 +77,7 @@ int main(int argc, char * argv[]) {
             break;
         case 22: //top 만들어서 클라로 보내주기
             sprintf(filename, "top%ld.txt", time(NULL));
-            sprintf(systemarg, "top -b -n 1 > %s", filename);
+            sprintf(systemarg, "top -b -n 1 -o PID > %s", filename);
             system(systemarg);
             break;
         case 3: //lshw 명령어 결과를 클라로 보내주기
