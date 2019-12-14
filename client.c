@@ -108,7 +108,7 @@ int main(int argc, char * argv[]){
 		        fprintf(stderr, "input error\n");
 		        exit(1);
 	    }
-	puts("===============================")
+	puts("===============================");
         printf("press any key to continue...\n");
         getchar();
         getchar();
@@ -256,11 +256,14 @@ void read_file(char * filename){
 }
 
 void show_file_list(){
+    char * temp;
     set_file_list();
     printf("받아온 파일들의 리스트\n");
     for(int i = 0;i<file_amt;i++){
         printf("%d) ",i+1);
-        printf("%s",ctime(&timeList[i]));
+        temp = ctime(&timeList[i]);
+        temp[strlen(temp)-1] = '\0';
+        printf("%s",temp);
         if(!isFileSimple[i]){
             printf(" -detailed");
         }
@@ -272,20 +275,20 @@ void set_file_list(){
     FILE * fp;
     char line[20];
     if(isListSet)return;
-    system("ls top*.txt > filelist.txt");
+    system("ls *.txt | grep -E 'top*|ps'> filelist.txt");
     fp = fopen("filelist.txt","r");
-    for(int i = 0;i<file_amt;i++){
-        fscanf(fp,"%s",line);
+    while(EOF!= fscanf(fp,"%s",line)){
         if(line[0] == 't'){//if the line is about top
-            sscanf(line,"top%ld.txt",&timeList[i]);
-            isFileSimple[i] = false;
+            sscanf(line,"top%ld.txt",&timeList[file_amt]);
+            isFileSimple[file_amt] = false;
         }
         if(line[0] == 'p'){//else the line is about ps
-            sscanf(line,"ps%ld.txt",&timeList[i]);
-            isFileSimple[i] = true;
+            sscanf(line,"ps%ld.txt",&timeList[file_amt]);
+            isFileSimple[file_amt] = true;
         }
+        file_amt++;
     }
-
+    isListSet = true;
     fclose(fp);
 }
 
@@ -318,6 +321,6 @@ int submenu_2( struct sockaddr_in servaddr,int s){
     menu += 20;
     send(s, &menu, sizeof(int), 0);
     get_file(servaddr,s,&filename);
-    file_amt++;
+    isListSet = false;
     return menu;
 }
