@@ -10,12 +10,22 @@
 #include<math.h>
 #include<stdbool.h>
 #include<time.h>
+#include <ctype.h>
 
 #define MAXLINE 127
 struct hw_info{
 	char class[100];
 	char description[300];
 };
+
+struct PROCESS_INFO{
+	int pid;
+	float cpu_pct;
+	float mem_pct;
+	char run_time[20];
+	char command[30];
+};	//top의 결과를 담을 구조체
+
 int display_menu();
 void kill_ps(int, char *, int);
 void get_ps(struct sockaddr_in, int);
@@ -28,11 +38,13 @@ void show_file_list();
 void set_file_list();
 void print_hw_info(struct hw_info[], int);
 int submenu_2(struct sockaddr_in, int);
+void make_info(char[]);
 
 int file_amt = 0;
 bool isFileSimple[40];
 time_t timeList[40];
 bool isListSet = false;
+struct PROCESS_INFO process[10000];
 
 int main(int argc, char * argv[]){
 	struct hw_info h[100] = {};
@@ -360,6 +372,34 @@ int submenu_2( struct sockaddr_in servaddr,int s){
     menu += 20;
     send(s, &menu, sizeof(int), 0);
     get_file(servaddr,s,&filename);
+	make_info(filename);
     isListSet = false;
     return menu;
+}
+
+void make_info(char filename[20]){
+	char line[120];
+	int pr, ni, virt, res, shr;
+	char s;
+	char user[20];
+	int cur = 0;
+
+	FILE* fp = fopen(filename, "r");
+	FILE* rf = fopen("temp.txt", "w");
+	if(fp == NULL){
+		fprintf(stderr, "파일 열기 에러");
+		exit(1);
+	}
+
+	while(1){
+		if( fgets(line, 120, fp) == NULL)
+			break;
+
+			if(isdigit(line[4]) != 0){ //%5d로 되어 있어서 5번째 칸이 숫자인지 확인
+				sscanf(line, "%d %s %d %d %d %d %d %c %f %f %s %s", &(process[cur].pid), user, &pr, &ni, &virt, &res, &shr, &s, &(process[cur].cpu_pct), &(process[cur].mem_pct), process[cur].run_time, process[cur].command);
+				//fprintf(rf, "%d %s %d %d %d %d %d %c %f %f %s %s\n", process[cur].pid, user, pr, ni, virt, res, shr, s, process[cur].cpu_pct, process[cur].mem_pct, process[cur].run_time, process[cur].command);	//확인용
+					cur++;
+			}
+	}
+	return;
 }
