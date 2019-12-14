@@ -20,11 +20,19 @@ struct hw_info{
 
 struct PROCESS_INFO{
 	int pid;
+	char user[20];
 	float cpu_pct;
 	float mem_pct;
 	char run_time[20];
 	char command[30];
 };	//top의 결과를 담을 구조체
+
+struct PS_INFO{
+	int pid;
+	char user[20];
+	char run_time[20];
+	char command[100];	//top이랑 다르게 나온다 
+};	//ps의 결과를 담을 구조체
 
 int display_menu();
 void kill_ps(int, char *, int);
@@ -38,7 +46,8 @@ void show_file_list();
 void set_file_list();
 void print_hw_info(struct hw_info[], int);
 int submenu_2(struct sockaddr_in, int);
-struct PROCESS_INFO* make_info(char[]);
+struct PROCESS_INFO* make_top_info(char[]);
+struct PS_INFO* 	 make_ps_info(char[]);
 
 int file_amt = 0;
 bool isFileSimple[40];
@@ -355,7 +364,8 @@ void print_hw_info(struct hw_info h[], int size){
 int submenu_2( struct sockaddr_in servaddr,int s){
     int menu;
     char input[20],filename[20];
-	struct PROCESS_INFO* info; 
+	struct PROCESS_INFO* info; 	//top
+	struct PS_INFO* ps_info;	//ps
     system("clear");
     printf("\n\t\t\t\t%16s\n", "Get ps MENU");
 	printf("\n\t\t\t=================================================");
@@ -371,38 +381,50 @@ int submenu_2( struct sockaddr_in servaddr,int s){
     }
     menu = atoi(input);
     menu += 20; 
+
     send(s, &menu, sizeof(int), 0);
     get_file(servaddr,s,&filename);
 
-	info = make_info(filename);
+	if(menu == 21){
+		ps_info = make_ps_info(filename);
+	}
 
+	if(menu == 22){
+		info = make_top_info(filename);
+	}
+
+/*
+	for (int i = 0; i < 1000; i++)
+	{
+		if(ps_info[i].pid == 0)
+			break;
+		printf("%s %d %s %s\n", ps_info[i].user, ps_info[i].pid, ps_info[i].run_time, ps_info[i].command);
+	}
+*///확인용
+
+/*
 	for (int i = 0; i < 1000; i++)
 	{
 		if(info[i].pid == 0)
 			break;
-		printf("%d %.1f %.1f %s %s\n", info[i].pid, info[i].cpu_pct, info[i].mem_pct, info[i].run_time, info[i].command);
+		printf("%d %s %.1f %.1f %s %s\n", info[i].pid, info[i].user, info[i].cpu_pct, info[i].mem_pct, info[i].run_time, info[i].command);
 	}
-	
+*///확인용	
 
     isListSet = false;
     return menu;
 }
 
-struct PROCESS_INFO* make_info(char filename[20]){
+struct PROCESS_INFO* make_top_info(char filename[20]){
 	char line[120];
 	int pr, ni, virt, res, shr;
 	char s;
-	char user[20];
 	int cur = 0;
 	struct PROCESS_INFO* temp = (struct PROCESS_INFO*)malloc(sizeof(struct PROCESS_INFO)*1000);
 
 	for (int i = 0; i < 1000; i++)
 	{
 		temp[i].pid = 0;
-		temp[i].mem_pct = 0.0f;
-		temp[i].cpu_pct = 0.0f;
-		temp[i].run_time[0] = '\0';
-		temp[i].command[0] = '\0';
 	}	//초기화
 	
 
@@ -417,10 +439,45 @@ struct PROCESS_INFO* make_info(char filename[20]){
 			break;
 
 			if(isdigit(line[4]) != 0){ //%5d로 되어 있어서 5번째 칸이 숫자인지 확인
-				sscanf(line, "%d %s %d %d %d %d %d %c %f %f %s %s", &(temp[cur].pid), user, &pr, &ni, &virt, &res, &shr, &s, &(temp[cur].cpu_pct), &(temp[cur].mem_pct), temp[cur].run_time, temp[cur].command);
+				sscanf(line, "%d %s %d %d %d %d %d %c %f %f %s %s", &(temp[cur].pid), temp[cur].user, &pr, &ni, &virt, &res, &shr, &s, &(temp[cur].cpu_pct), &(temp[cur].mem_pct), temp[cur].run_time, temp[cur].command);
 				cur++;
 			}
 	}
 	fclose(fp);
+	return temp;
+}
+
+struct PS_INFO* make_ps_info(char* filename){
+	char line[2000];
+	int ppid;
+	int c;
+	char stime[10];
+	char tty_name[10];
+	int cur = 0;
+	struct PS_INFO* temp = (struct PS_INFO*)malloc(sizeof(struct PS_INFO) * 1000);
+
+	FILE* fp = fopen(filename, "r");
+	if(fp == NULL){
+		fprintf(stderr, "파일 열기 에러");
+		exit(1);
+	}
+
+	for (int i = 0; i < 1000; i++)
+	{
+		temp[i].pid = 0;
+	}
+	
+
+	fgets(line, 2000, fp);	//첫 한줄은 스킵
+	while(1){
+		//if(fgets(line, 200, fp) == NULL)
+		//	break;
+		if(feof(fp))
+			break;
+		fgets(line, 2000, fp);
+		sscanf(line, "%s %d %d %d %s %s %s %s", temp[cur].user, &(temp[cur].pid), &ppid, &c, stime, tty_name, temp[cur].run_time, temp[cur].command);
+		temp[cur].command[sizeof(temp->command) - 1] = '\0';
+		cur++;
+	}
 	return temp;
 }
