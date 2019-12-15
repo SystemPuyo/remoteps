@@ -12,6 +12,7 @@
 #include <time.h>
 #include <ctype.h>
 #include <pwd.h>
+#include <signal.h>
 
 #define MAXLINE 127
 struct hw_info {
@@ -167,7 +168,7 @@ int main(int argc, char * argv[]) {
 			exit(1);
 		}
 		printf("================================================================\n");
-		printf("press any key to continue...\n");
+		printf("press ENTER key to continue...\n");
 		getchar();
 		getchar();
 	}
@@ -178,20 +179,20 @@ int display_menu(void) {
 	char input[100] = { '\0' };
 	while (1) {
 		system("clear");
-		printf("\n\t\t\t\t%s", "Remote Ps");
+		printf("\n\t\t\t%s", "Remote Ps");
 		printf("\n\t\t\t=================================================");
-		printf("\n\t\t\t\t%16s\n", "PS MENU");
+		printf("\n\t\t\t\t%20s\n", "PS MENU");
 		printf("\n\t\t\t=================================================");
 		printf("\n\t\t\t=\t1) %-25s\t\t=", "kill process");
 		printf("\n\t\t\t=\t2) %-25s\t\t=", "Get ps");
 		printf("\n\t\t\t=\t3) %-25s\t\t=", "Show hardware info");
-		printf("\n\t\t\t=\t4) %-25s\t\t=", "Compare two process use histories");
-		printf("\n\t\t\t-\t5) %-25s\t\t=", "Show received top file list");
+		printf("\n\t\t\t=\t4) %-25s\t=", "Compare two process use histories");
+		printf("\n\t\t\t=\t5) %-25s\t\t=", "Show received top file list");
 		printf("\n\t\t\t=\tq) %-25s\t\t=", "exit");
 		printf("\n\t\t\t=================================================");
 		printf("\n\t\t\t=> ");
 		scanf("%s", input);
-
+		
 		if (strcmp(input, "q") == 0 || strcmp(input, "Q") == 0)
 			return -1;
 		menu = atoi(input); // to handle some wrong input
@@ -474,7 +475,7 @@ void get_file(struct sockaddr_in servaddr, int s, char(*filename)[20]) {
 	int filesize, fp, total = 0, sread;
 	inet_ntop(AF_INET, &servaddr.sin_addr.s_addr, server_ip, sizeof(server_ip));
 	printf("IP : %s ", server_ip);
-	printf("Port : %x ", ntohs(servaddr.sin_port));
+	printf("Port : %d ", ntohs(servaddr.sin_port));
 
 	recv(s, *filename, 20, 0);
 	printf("%s ", *filename);
@@ -492,7 +493,10 @@ void get_file(struct sockaddr_in servaddr, int s, char(*filename)[20]) {
 		buf[sread] = 0;
 		write(fp, buf, sread);
 		bzero(buf, sizeof(buf));
-		printf("processing : %4.2f\r%%", total * 100 / (float)filesize);
+		printf("processing : %4.2f%%", total * 100 / (float)filesize);
+		if (total * 100 / (float)filesize != 100){
+			printf("\r");
+		}
 	}
 	puts("");
 }
