@@ -1,16 +1,17 @@
-#include<stdio.h>
-#include<stdlib.h>
-#include<string.h>
-#include<sys/types.h>
-#include<sys/socket.h>
-#include<netinet/in.h>
-#include<unistd.h>
-#include<fcntl.h>
-#include<arpa/inet.h>
-#include<math.h>
-#include<stdbool.h>
-#include<time.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <unistd.h>
+#include <fcntl.h>
+#include <arpa/inet.h>
+#include <math.h>
+#include <stdbool.h>
+#include <time.h>
 #include <ctype.h>
+#include <pwd.h>
 
 #define MAXLINE 127
 struct hw_info{
@@ -327,14 +328,19 @@ void get_file(struct sockaddr_in servaddr,int s,char (*filename)[20]){
     puts("");
 }
 void read_file(char * filename){
+    uid_t user_id = getuid();
     struct PS_INFO *ps_info;
     struct PROCESS_INFO *top_info;
+    struct passwd *user_pw = getpwuid(user_id);
     if(filename[0] == 't'){//reading the top result
         top_info = make_top_info(filename);
         for(int i = 0;top_info[i].pid != -1;i++){
             //print blah
             if(strcmp(top_info[i].user,"root") == 0){
                 red();
+            }
+            if(strcmp(top_info[i].user,user_pw->pw_name) == 0){
+                green();
             }
         
             printf("%d %s %.1f %.1f %s %s\n", top_info[i].pid, top_info[i].user,
