@@ -213,7 +213,7 @@ void kill_ps(int index, char psname[], int s, struct PROCESS_INFO *p) {
 	// kill process by pid or psname
 	if (index == -1) {//pid가 아니라 psname으로 할려고 할려면ㄴ
 		for (int i = 0; p[i].pid != -1; i++) {
-			printf("%s\n", p[i].command);
+			//printf("%s\n", p[i].command);
 			if (strcmp(psname, p[i].command) == 0) {
 				index = p[i].pid;
 				break;
