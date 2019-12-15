@@ -124,7 +124,7 @@ int main(int argc, char * argv[]) {
         total = 0;
         if(sel == 1){
             recv(accp_sock,&sel,sizeof(int),0);
-            sprintf(systemarg,"ps -9 %d",sel);//pid 받아서 그걸로 ps kill함
+            sprintf(systemarg,"kill -9 %d",sel);//pid 받아서 그걸로 ps kill함
             system(systemarg);
 
         }
