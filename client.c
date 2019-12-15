@@ -64,7 +64,7 @@ void hardware_info(struct sockaddr_in, int, struct hw_info[], int *);
 void history_analysis();
 void program_exit();
 void get_file(struct sockaddr_in, int,char (*)[20]);
-void read_file(char *);
+void read_file(char *,uid_t);
 void show_file_list();
 void set_file_list();
 void print_hw_info(struct hw_info[], int);
@@ -82,11 +82,12 @@ int main(int argc, char * argv[]){
 	struct hw_info h[100] = {};
 	struct sockaddr_in servaddr;
 	int s;
-    char filename[30];
+    char filename[20];
     int kill_pid;
 	char kill_ps_name[30];
 	int sel = 0;
 	int hw_size = 0;
+    uid_t servuid;
 	if(argc !=3){
 		printf("usage : %s ip_address port",argv[0]);
 		exit(1);
@@ -111,7 +112,7 @@ int main(int argc, char * argv[]){
 
   //연결 되었으면 수신 준비
     puts("서버와 연결됨..");
-
+    recv(s,&servuid,sizeof(uid_t),0);
     while(1){
 	    sel = display_menu();
         if(sel != 2)
@@ -120,7 +121,9 @@ int main(int argc, char * argv[]){
     
     	switch(sel){
 	    	case 1:
-                printf("Enter pid or process name to kill : ");
+                get_file(servaddr,s,&filename);
+                read_file(filename,servuid);
+                printf("\nEnter pid or process name to kill : ");
 		        scanf("%s",kill_ps_name);
                 if((unsigned long)log10(atoi(kill_ps_name)) + 1 == strlen(kill_ps_name)){
                     //if input was pure integer input
@@ -151,7 +154,7 @@ int main(int argc, char * argv[]){
                     break;
                 }
                 sprintf(filename,"%s%ld.txt",isFileSimple[sel]?"ps":"top",timeList[sel]);
-                read_file(filename);
+                read_file(filename,servuid);
                 break;
 		    case -1:
 		        printf("프로그램을 종료하겠습니다.\n");
@@ -479,8 +482,7 @@ void get_file(struct sockaddr_in servaddr,int s,char (*filename)[20]){
     }
     puts("");
 }
-void read_file(char * filename){
-    uid_t user_id = getuid();
+void read_file(char * filename,uid_t user_id){
     struct PS_INFO *ps_info;
     struct PROCESS_INFO *top_info;
     struct passwd *user_pw = getpwuid(user_id);

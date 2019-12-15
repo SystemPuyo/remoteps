@@ -8,6 +8,7 @@
 #include <fcntl.h>
 #include <arpa/inet.h>
 #include <time.h>
+#include <pwd.h>
 
 #define MAXLINE 127
 
@@ -45,7 +46,7 @@ int main(int argc, char * argv[]) {
     int sel;
     char systemarg[100];
     int topcnt = 0,euid;
-
+    uid_t my_uid = getuid();
     if (argc != 2) {
         printf("usage: %s port ", argv[0]);
         exit(0);
@@ -60,21 +61,18 @@ int main(int argc, char * argv[]) {
         reset();
     }
     accp_sock = init(servaddr,argv[1],listen_sock,cliaddr);
+    send(accp_sock, & my_uid, sizeof(my_uid), 0); 
     while (1) {
         printf("명령어를 기다리고 있습니다.\n");
         recv(accp_sock, & sel, sizeof(int), 0);
         //여기는 클라이언트에서 입력을 넘기면 그 입력 된 숫자를 받음 
         switch (sel) {
-        case 1:
-            recv(accp_sock,&sel,sizeof(int),0);
-            sprintf(systemarg,"ps -9 %d",sel);//pid 받아서 그걸로 ps kill함
-            system(systemarg);
-            break;
         case 21://ps 만들어서 클라로 보내주기
             sprintf(filename,"ps%ld.txt",time(NULL));
             sprintf(systemarg, "ps -fa > %s",filename);
             system(systemarg);
             break;
+        case 1:
         case 22: //top 만들어서 클라로 보내주기
             sprintf(filename, "top%ld.txt", time(NULL));
             sprintf(systemarg, "top -b -n 1 -o PID > %s", filename);
@@ -124,6 +122,12 @@ int main(int argc, char * argv[]) {
         }
         printf("\n");
         total = 0;
+        if(sel == 1){
+            recv(accp_sock,&sel,sizeof(int),0);
+            sprintf(systemarg,"ps -9 %d",sel);//pid 받아서 그걸로 ps kill함
+            system(systemarg);
+
+        }
         //do something later
     }
 
