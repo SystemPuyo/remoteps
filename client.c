@@ -34,11 +34,33 @@ struct PS_INFO{
 	char command[100];	//top이랑 다르게 나온다 
 };	//ps의 결과를 담을 구조체
 
+void red() {
+	printf("\033[1;31m");
+}
+
+void yellow() {
+	printf("\033[1;33m");
+}
+
+void purple() {
+	printf("\033[0;35m");
+}
+void green() {
+	printf("\033[0;32m");
+}
+void blue() {
+	printf("\033[0;34m");
+}
+void reset() {
+	printf("\033[0m");
+}
+
+
 int display_menu();
 void kill_ps(int, char *, int);
 void get_ps(struct sockaddr_in, int);
 void hardware_info(struct sockaddr_in, int, struct hw_info[], int *);
-void get_history();
+void history_analysis();
 void program_exit();
 void get_file(struct sockaddr_in, int,char (*)[20]);
 void read_file(char *);
@@ -58,10 +80,10 @@ struct PROCESS_INFO process[10000];
 int main(int argc, char * argv[]){
 	struct hw_info h[100] = {};
 	struct sockaddr_in servaddr;
-	int s, nbyte;
+	int s;
+    char filename[30];
     int kill_pid;
-	char filename[20],kill_ps_name[30];
-	int  filenamesize;
+	char kill_ps_name[30];
 	int sel = 0;
 	int hw_size = 0;
 	if(argc !=3){
@@ -113,14 +135,22 @@ int main(int argc, char * argv[]){
                 if(sel == -1) continue;
                 send(s,&sel,sizeof(int),0);
 		        break;
-		case 3:
-			hardware_info(servaddr, s, h, &hw_size);
+		    case 3:
+			    hardware_info(servaddr, s, h, &hw_size);
 		        break;
 	        case 4:
-		        //get_history();
+		        history_analysis();
 		        break;
             case 5:
                 show_file_list();
+                printf("select file to see : ");
+                scanf("%d",&sel);
+                if(sel > file_amt){
+                    printf("the selected file does not exist");
+                    break;
+                }
+                sprintf(filename,"%s%ld.txt",isFileSimple[sel]?"ps":"top",timeList[sel]);
+                read_file(filename);
                 break;
 		    case -1:
 		        printf("프로그램을 종료하겠습니다.\n");
@@ -148,7 +178,7 @@ int display_menu(void) {
 		printf("\n\t\t\t=\t1) %-25s\t\t=", "kill process");
 		printf("\n\t\t\t=\t2) %-25s\t\t=", "Get ps");
 		printf("\n\t\t\t=\t3) %-25s\t\t=", "Show hardware info");
-		printf("\n\t\t\t=\t4) %-25s\t\t=", "Show process use history");
+		printf("\n\t\t\t=\t4) %-25s\t\t=", "Compare two process use histories");
 		printf("\n\t\t\t-\t5) %-25s\t\t=", "Show received top file list");
         printf("\n\t\t\t=\tq) %-25s\t\t=", "exit");
 		printf("\n\t\t\t=================================================");
@@ -265,7 +295,7 @@ void hardware_info(struct sockaddr_in servaddr, int s, struct hw_info h[], int *
     hasInfo = true;
 }
 
-void get_history(){
+void history_analysis(){
 	// get result of top command by file (by 1s), and find most used program,
 	// most resource reused program by multithreading
 }
@@ -297,9 +327,32 @@ void get_file(struct sockaddr_in servaddr,int s,char (*filename)[20]){
     puts("");
 }
 void read_file(char * filename){
-    char temp[20];//임시 구현
-    sprintf(temp,"cat %s",filename);
-    system(temp);
+    struct PS_INFO *ps_info;
+    struct PROCESS_INFO *top_info;
+    if(filename[0] == 't'){//reading the top result
+        top_info = make_top_info(filename);
+        for(int i = 0;top_info[i].pid != -1;i++){
+            //print blah
+            if(strcmp(top_info[i].user,"root") == 0){
+                red();
+            }
+        
+            printf("%d %s %.1f %.1f %s %s\n", top_info[i].pid, top_info[i].user,
+                    top_info[i].cpu_pct, top_info[i].mem_pct, top_info[i].run_time, top_info[i].command);
+
+            reset();
+        }
+    }
+    else{//reading ps result
+        ps_info = make_ps_info(filename);
+        for(int i = 0;ps_info[i].pid != -1;i++){
+            if(strcmp(ps_info[i].user,"root") == 0){
+                red();
+            }
+            printf("%s %d %s %s\n", ps_info[i].user, ps_info[i].pid, ps_info[i].run_time, ps_info[i].command);
+            reset();
+        }
+    }
 }
 
 void show_file_list(){
@@ -322,7 +375,7 @@ void set_file_list(){
     FILE * fp;
     char line[20];
     if(isListSet)return;
-    system("ls *.txt | grep -E 'top*|ps'> filelist.txt");
+    system("ls *.txt |sort| grep -E 'top*|ps'> filelist.txt");
     fp = fopen("filelist.txt","r");
     while(EOF!= fscanf(fp,"%s",line)){
         if(line[0] == 't'){//if the line is about top
@@ -424,7 +477,7 @@ struct PROCESS_INFO* make_top_info(char filename[20]){
 
 	for (int i = 0; i < 1000; i++)
 	{
-		temp[i].pid = 0;
+		temp[i].pid = -1;
 	}	//초기화
 	
 
@@ -464,7 +517,7 @@ struct PS_INFO* make_ps_info(char* filename){
 
 	for (int i = 0; i < 1000; i++)
 	{
-		temp[i].pid = 0;
+		temp[i].pid = -1;
 	}
 	
 
