@@ -87,6 +87,7 @@ int main(int argc, char * argv[]) {
             system(systemarg);
             break;
         case 4:
+        case 5:
             continue;//이건 클라 혼자서 하는 것이니 여기서는 그냥 continue 하자구?
             break;
 

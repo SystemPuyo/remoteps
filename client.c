@@ -299,6 +299,158 @@ void hardware_info(struct sockaddr_in servaddr, int s, struct hw_info h[], int *
 void history_analysis(){
 	// get result of top command by file (by 1s), and find most used program,
 	// most resource reused program by multithreading
+    int first,second;
+    char filename[30];
+    int firstIndex = 0,secondIndex = 0;
+    struct PROCESS_INFO *top[2];
+    struct PS_INFO *ps[2];
+    show_file_list();
+    printf("\nselect two file to compare > ");
+    scanf("%d %d",&first,&second);
+    
+    if(first > file_amt || second > file_amt){
+        printf("chosen file does not exist!");
+        return;
+    }
+    first--;second--;
+    if(isFileSimple[first] != isFileSimple[second]){
+        printf("two chosen file's type are not same!");
+        return;
+    }
+    if(isFileSimple[first]){
+        sprintf(filename,"ps%ld.txt",timeList[first]);
+        ps[0] = make_ps_info(filename);
+        sprintf(filename,"ps%ld.txt",timeList[second]);
+        ps[1] = make_ps_info(filename);
+        while(ps[0][firstIndex].pid != -1 && ps[1][secondIndex].pid != -1){
+            if(ps[0][firstIndex].pid == ps[0][firstIndex].pid 
+                    && strcmp(ps[0][firstIndex].user,ps[1][secondIndex].user) == 0){
+                printf("%s %d %s %s\n", ps[1][secondIndex].user, ps[1][secondIndex].pid, ps[1][secondIndex].run_time,
+                            ps[1][secondIndex].command);
+                firstIndex++;
+                secondIndex++;
+
+            }
+            else if(ps[0][firstIndex].pid > ps[1][secondIndex].pid){
+                green();
+                printf("%s %d %s %s\n", ps[0][firstIndex].user, ps[0][firstIndex].pid, ps[0][firstIndex].run_time,
+                            ps[0][firstIndex].command);
+               firstIndex++; 
+                reset();
+            }
+            else if(ps[0][firstIndex].pid < ps[1][secondIndex].pid){
+                 purple();
+                 printf("%s %d %s %s\n", ps[1][secondIndex].user, ps[1][secondIndex].pid, ps[1][secondIndex].run_time,
+                            ps[1][secondIndex].command);
+                 secondIndex++;
+                 reset();
+
+            }
+            else{
+                 green();
+                 printf("%s %d %s %s\n", ps[0][firstIndex].user, ps[0][firstIndex].pid, ps[0][firstIndex].run_time,
+                            ps[0][firstIndex].command);
+                 purple();
+                 printf("%s %d %s %s\n", ps[1][secondIndex].user, ps[1][secondIndex].pid, ps[1][secondIndex].run_time,
+                            ps[1][secondIndex].command);
+                 reset();
+                 firstIndex++;
+                 secondIndex++;
+
+            }
+            if(ps[0][firstIndex].pid == -1){
+                purple();
+                for(;ps[1][secondIndex].pid != -1;secondIndex++){
+                    printf("%s %d %s %s\n", ps[1][secondIndex].user, ps[1][secondIndex].pid, ps[1][secondIndex].run_time,
+                            ps[1][secondIndex].command);
+
+                }
+                reset();
+            }
+            if(ps[1][secondIndex].pid == -1){
+                green();
+                for(;ps[0][firstIndex].pid != -1 ; firstIndex++){
+                    printf("%s %d %s %s\n", ps[0][firstIndex].user, ps[0][firstIndex].pid, ps[0][firstIndex].run_time,
+                            ps[0][firstIndex].command);
+
+                }
+                reset();
+            }
+        }
+    } 
+    else{
+        sprintf(filename,"top%ld.txt",timeList[first]);
+        top[0] = make_top_info(filename);
+        sprintf(filename,"top%ld.txt",timeList[second]);
+        top[1] = make_top_info(filename);
+        while(top[0][firstIndex].pid != -1 && top[1][secondIndex].pid != -1){
+            if(top[0][firstIndex].pid == top[1][secondIndex].pid &&
+                    strcmp(top[0][firstIndex].user,top[1][secondIndex].user) == 0){
+                printf("%d %s %.1f %.1f %s %s\n", top[0][firstIndex].pid, top[0][firstIndex].user,
+                    top[0][firstIndex].cpu_pct, top[0][firstIndex].mem_pct, top[0][firstIndex].run_time,
+                    top[0][firstIndex].command);
+                firstIndex++;
+                secondIndex++;
+
+            }
+            else if(top[0][firstIndex].pid > top[1][secondIndex].pid){
+                green();
+                 printf("%d %s %.1f %.1f %s %s\n", top[0][firstIndex].pid, top[0][firstIndex].user,
+                    top[0][firstIndex].cpu_pct, top[0][firstIndex].mem_pct, top[0][firstIndex].run_time,
+                    top[0][firstIndex].command);
+                 firstIndex++;
+                reset();
+            }
+            else if(top[0][firstIndex].pid < top[1][secondIndex].pid){
+                purple();
+                 printf("%d %s %.1f %.1f %s %s\n", top[1][secondIndex].pid, top[1][secondIndex].user,
+                    top[1][secondIndex].cpu_pct, top[1][secondIndex].mem_pct, top[1][secondIndex].run_time,
+                    top[1][secondIndex].command);
+                secondIndex++;
+                reset();
+
+            }
+            else{
+                green();
+                 printf("%d %s %.1f %.1f %s %s\n", top[0][firstIndex].pid, top[0][firstIndex].user,
+                    top[0][firstIndex].cpu_pct, top[0][firstIndex].mem_pct, top[0][firstIndex].run_time,
+                    top[0][firstIndex].command);
+                purple();
+                 printf("%d %s %.1f %.1f %s %s\n", top[1][secondIndex].pid, top[1][secondIndex].user,
+                    top[1][secondIndex].cpu_pct, top[1][secondIndex].mem_pct, top[1][secondIndex].run_time,
+                    top[1][secondIndex].command);
+                reset();
+                firstIndex++;
+                secondIndex++;
+            }
+            if(top[0][firstIndex].pid == -1){
+                purple();
+                for(;top[1][secondIndex].pid != -1;secondIndex++){
+                    printf("%d %s %.1f %.1f %s %s\n", top[1][secondIndex].pid, top[1][secondIndex].user,
+                    top[1][secondIndex].cpu_pct, top[1][secondIndex].mem_pct, top[1][secondIndex].run_time,
+                    top[1][secondIndex].command);
+
+                }
+                reset();
+            }
+            if(top[1][secondIndex].pid == -1){
+                green();
+                for(;top[0][firstIndex].pid != -1 ; firstIndex++){
+                    printf("%d %s %.1f %.1f %s %s\n", top[0][firstIndex].pid, top[0][firstIndex].user,
+                    top[0][firstIndex].cpu_pct, top[0][firstIndex].mem_pct, top[0][firstIndex].run_time,
+                    top[0][firstIndex].command);
+
+                }
+                reset();
+            }
+        }
+    }
+
+    green();
+    printf("\ngreen : only in first file");
+    purple();
+    printf("\npurple : only in second file\n");
+    reset();
 }
 void get_file(struct sockaddr_in servaddr,int s,char (*filename)[20]){
     char server_ip[20],buf[MAXLINE+1];
@@ -355,6 +507,9 @@ void read_file(char * filename){
             if(strcmp(ps_info[i].user,"root") == 0){
                 red();
             }
+            if(strcmp(ps_info[i].user,user_pw->pw_name) == 0){
+                green();
+            }
             printf("%s %d %s %s\n", ps_info[i].user, ps_info[i].pid, ps_info[i].run_time, ps_info[i].command);
             reset();
         }
@@ -381,6 +536,7 @@ void set_file_list(){
     FILE * fp;
     char line[20];
     if(isListSet)return;
+    file_amt = 0;
     system("ls *.txt |sort| grep -E 'top*|ps'> filelist.txt");
     fp = fopen("filelist.txt","r");
     while(EOF!= fscanf(fp,"%s",line)){
@@ -534,7 +690,8 @@ struct PS_INFO* make_ps_info(char* filename){
 		if(feof(fp))
 			break;
 		fgets(line, 2000, fp);
-		sscanf(line, "%s %d %d %d %s %s %s %s", temp[cur].user, &(temp[cur].pid), &ppid, &c, stime, tty_name, temp[cur].run_time, temp[cur].command);
+		sscanf(line, "%s %d %d %d %s %s %s %s", temp[cur].user, &(temp[cur].pid), &ppid, &c, stime, 
+                tty_name, temp[cur].run_time, temp[cur].command);
 		temp[cur].command[sizeof(temp->command) - 1] = '\0';
 		cur++;
 	}
