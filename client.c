@@ -58,7 +58,7 @@ void reset() {
 
 
 int display_menu();
-void kill_ps(int, char *, int);
+void kill_ps(int, char *, int,struct PROCESS_INFO*);
 void get_ps(struct sockaddr_in, int);
 void hardware_info(struct sockaddr_in, int, struct hw_info[], int *);
 void history_analysis();
@@ -87,6 +87,7 @@ int main(int argc, char * argv[]){
 	char kill_ps_name[30];
 	int sel = 0;
 	int hw_size = 0;
+    struct PROCESS_INFO *p;
     uid_t servuid;
 	if(argc !=3){
 		printf("usage : %s ip_address port",argv[0]);
@@ -123,15 +124,16 @@ int main(int argc, char * argv[]){
 	    	case 1:
                 get_file(servaddr,s,&filename);
                 read_file(filename,servuid);
+                p = make_top_info(filename);
                 printf("\nEnter pid or process name to kill : ");
 		        scanf("%s",kill_ps_name);
                 if((unsigned long)log10(atoi(kill_ps_name)) + 1 == strlen(kill_ps_name)){
                     //if input was pure integer input
                     kill_pid = atoi(kill_ps_name);
-                    kill_ps(kill_pid,NULL,s);//kill by pid
+                    kill_ps(kill_pid,NULL,s,p);//kill by pid
                 }
                 else{
-                    kill_ps(-1,kill_ps_name,s);//kill by name
+                    kill_ps(-1,kill_ps_name,s,p);//kill by name
                 }
     		    break;
 	    	case 2:
@@ -206,13 +208,24 @@ int display_menu(void) {
 	return 0;
 }
 
-void kill_ps (int index, char *psname,int s){
+void kill_ps (int index, char *psname,int s,struct PROCESS_INFO *p){
 	// kill process by pid or psname
     if(!psname){//pid가 아니라 psname으로 할려고 할려면ㄴ
-        //psname 에서 pid 찾으려면 따로 작업 해야지
+        for(int i = 0;p[i].pid != -1 ;i++){
+            printf("%s\n",p[i].command);
+            if(strcmp(psname,p[i].command) == 0){
+                index = p[i].pid;
+                break;
+            }
+        }
     }
     else{
-        //psname을 구하는 코드
+        for(int i =0;p[i].pid != -1;i++){
+            if(p[i].pid == index){
+                psname = p[i].command;
+                break;
+            }
+        }
     }
     send(s,&index,sizeof(index),0);
     printf("killed process in remote machine. pid : %d, psname : %s\n",index,psname);
