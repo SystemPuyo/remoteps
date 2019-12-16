@@ -317,6 +317,7 @@ void hardware_info(struct sockaddr_in servaddr, int s, struct hw_info h[], int *
 	}
 	*count = cnt;
 	hasInfo = true;
+	print_hw_info(h, *count);
 }
 
 void history_analysis() {
