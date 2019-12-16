@@ -121,10 +121,9 @@ int main(int argc, char * argv[]) {
 		perror("connect fail");
 		exit(0);
 	}
-	printf("aa\n");
 
 	//¿¬°á µÇ¾úÀ¸¸é ¼ö½Å ÁØºñ
-	puts("¼­¹ö¿Í ¿¬°áµÊ..");
+	puts("connected to server");
 	recv(s, &servuid, sizeof(uid_t), 0);
 	while (1) {
 		sel = display_menu();
@@ -172,7 +171,7 @@ int main(int argc, char * argv[]) {
 			read_file(filename, servuid);
 			break;
 		case -1:
-			printf("ÇÁ·Î±×·¥À» Á¾·áÇÏ°Ú½À´Ï´Ù.\n");
+			printf("exitting program.\n");
 			return 0;
 		default:
 			fprintf(stderr, "input error\n");
@@ -555,7 +554,7 @@ void read_file(char * filename, uid_t user_id) {
 void show_file_list() {
 	char * temp;
 	set_file_list();
-	printf("¹Þ¾Æ¿Â ÆÄÀÏµéÀÇ ¸®½ºÆ®\n");
+	printf("the list of received file\n");
 	for (int i = 0; i<file_amt; i++) {
 		printf("%d) ", i + 1);
 		temp = ctime(&timeList[i]);
@@ -681,7 +680,7 @@ struct PROCESS_INFO* make_top_info(char filename[20]) {
 
 	FILE* fp = fopen(filename, "r");
 	if (fp == NULL) {
-		fprintf(stderr, "ÆÄÀÏ ¿­±â ¿¡·¯");
+		fprintf(stderr, "cannot open file¯");
 		exit(1);
 	}
 
@@ -709,7 +708,7 @@ struct PS_INFO* make_ps_info(char* filename) {
 
 	FILE* fp = fopen(filename, "r");
 	if (fp == NULL) {
-		fprintf(stderr, "ÆÄÀÏ ¿­±â ¿¡·¯");
+		fprintf(stderr, "cannot open file¯");
 		exit(1);
 	}
 
