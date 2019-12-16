@@ -180,7 +180,7 @@ int main(int argc, char * argv[]) {
 		printf("================================================================\n");
 		printf("press ENTER key to continue...\n");
 		getchar();
-		getchar();
+        if(sel!=3) getchar();
 	}
 }
 
@@ -558,7 +558,7 @@ void show_file_list() {
 	set_file_list();
 	printf("the list of received file\n");
 	for (int i = 0; i<file_amt; i++) {
-		printf("%d) ", i + 1);
+		printf("%d) ", i);
 		temp = ctime(&timeList[i]);
 		temp[strlen(temp) - 1] = '\0';
 		printf("%s", temp);
