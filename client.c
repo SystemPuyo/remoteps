@@ -231,6 +231,10 @@ void kill_ps(int index, char psname[], int s, struct PROCESS_INFO *p) {
 		}
 	}
 	send(s, &index, sizeof(index), 0);
+    if(index == -1){
+        printf("there is no process named %s in remotemachine\n",psname);
+        return;
+    }
 	printf("killed process in remote machine. pid : %d, psname : %s\n", index, psname);
 }
 

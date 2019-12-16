@@ -129,6 +129,9 @@ int main(int argc, char * argv[]) {
         total = 0;
         if(sel == 1){
             recv(accp_sock,&sel,sizeof(int),0);
+            if(sel == -1){
+                continue;
+            }
             sprintf(systemarg,"kill -9 %d",sel);//pid 받아서 그걸로 ps kill함
             system(systemarg);
 
