@@ -133,15 +133,16 @@ int main(int argc, char * argv[]) {
         printf("\n");
         total = 0;
         if(sel == 1){
-            recv(accp_sock,&sel,sizeof(int),0);
-            if(sel == -1){
+            int tokill;
+            recv(accp_sock,&tokill,sizeof(int),0);
+            if(tokill == -1){
                 continue;
             }
-            sprintf(systemarg,"kill -9 %d",sel);//pid 받아서 그걸로 ps kill함
+            sprintf(systemarg,"kill -9 %d",tokill);//pid 받아서 그걸로 ps kill함
             system(systemarg);
 
         }
-        if(sel != 3)
+        if(sel != 3 &&  sel !=1)
             read(accp_sock, & sel, sizeof(int));
         //do something later
     }
