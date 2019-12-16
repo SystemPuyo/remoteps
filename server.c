@@ -10,7 +10,7 @@
 #include <time.h>
 #include <pwd.h>
 #include<sys/stat.h>
-#include<stdbool.h>
+#include<netdb.h>
 
 #define MAXLINE 127
 
@@ -49,7 +49,6 @@ int main(int argc, char * argv[]) {
     char systemarg[100];
     int topcnt = 0,euid;
     struct stat tmp_stat;
-    bool hasSent = false;
     uid_t my_uid = getuid();
     if (argc != 2) {
         printf("usage: %s port ", argv[0]);
@@ -84,12 +83,10 @@ int main(int argc, char * argv[]) {
             system(systemarg);
             break;
         case 3: //lshw 명령어 결과를 클라로 보내주기
-            if(hasSent) continue;
             strcpy(filename,"lshw.txt");
             sprintf(systemarg,"lshw -short > %s",filename);
             send(accp_sock,&euid,sizeof(euid),0);//euid를 보내서 정보를 알림
             system(systemarg);
-            hasSent = true;
             break;
         case 4:
         case 5:
@@ -140,8 +137,7 @@ int main(int argc, char * argv[]) {
             system(systemarg);
 
         }
-        if(sel !=3)
-            read(accp_sock, & sel, sizeof(int));
+        read(accp_sock, & sel, sizeof(int));
         //do something later
     }
 
@@ -150,21 +146,28 @@ int main(int argc, char * argv[]) {
 }
 
 int init(struct sockaddr_in servaddr, char * port, int listen_sock, struct sockaddr_in cliaddr) {
-    int accp_sock, addrlen = sizeof(cliaddr);
+    int accp_sock;
     char cli_ip[20];
+    char hostname[256];
+    int hostlen = 256;
+    struct hostent *hp;
+
     if ((listen_sock = socket(PF_INET, SOCK_STREAM, 0)) < 0) {
         perror("socket fail");
         exit(0);
     }
-    bzero((char * ) & servaddr, sizeof(servaddr));
     // servaddr 세팅
-    servaddr.sin_family = AF_INET;
-    servaddr.sin_addr.s_addr = htonl(INADDR_ANY);
+    bzero((void *) &servaddr, sizeof(servaddr));
+
+    gethostname(hostname,hostlen);
+    hp = gethostbyname(hostname);
+
+    bcopy((void*) hp->h_addr,(void*) &servaddr.sin_addr,hp->h_length);
+    servaddr.sin_family = AF_INET; 
     servaddr.sin_port = htons(atoi(port));
 
     // bind() 호출
-    if (bind(listen_sock, (struct sockaddr * ) & servaddr,
-            sizeof(servaddr)) < 0) {
+    if (bind(listen_sock, (struct sockaddr *)&servaddr, sizeof(servaddr)) < 0) {
         perror("bind fail");
         exit(0);
     }
@@ -173,8 +176,7 @@ int init(struct sockaddr_in servaddr, char * port, int listen_sock, struct socka
 
     puts("서버가 연결요청을 기다림..");
     // 연결요청을 기다림
-    accp_sock = accept(listen_sock,
-        (struct sockaddr * ) & cliaddr, & addrlen);
+    accp_sock = accept(listen_sock, NULL, NULL);
 
     if (accp_sock < 0) {
         perror("accept fail");

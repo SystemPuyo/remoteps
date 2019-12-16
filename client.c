@@ -13,6 +13,7 @@
 #include <ctype.h>
 #include <pwd.h>
 #include <signal.h>
+#include<netdb.h>
 
 #define MAXLINE 127
 struct hw_info {
@@ -82,6 +83,7 @@ struct PROCESS_INFO process[10000];
 int main(int argc, char * argv[]) {
 	struct hw_info h[100] = {};
 	struct sockaddr_in servaddr;
+	struct hostent *hp;
 	int s;
 	char filename[20];
 	int kill_pid;
@@ -101,16 +103,25 @@ int main(int argc, char * argv[]) {
 	}
 
 	// 에코 서버의 소켓주소 구조체 작성
-	bzero((char *)& servaddr, sizeof(servaddr));
+	bzero(&servaddr, sizeof(servaddr));
+	hp = gethostbyname(argv[1]);
+	if (hp == NULL){
+		perror(argv[1]);
+		exit(-1);
+	}
+	bcopy(hp->h_addr, (struct sockaddr *)&servaddr.sin_addr, hp->h_length);
 	servaddr.sin_family = AF_INET;
-	inet_pton(AF_INET, argv[1], &servaddr.sin_addr);
 	servaddr.sin_port = htons(atoi(argv[2]));
+	
 
+
+	printf("qq\n");
 	// 연결요청
-	if (connect(s, (struct sockaddr *) & servaddr, sizeof(servaddr)) < 0) {
+	if (connect(s, (struct sockaddr *) &servaddr, sizeof(servaddr)) < 0) {
 		perror("connect fail");
 		exit(0);
 	}
+	printf("aa\n");
 
 	//연결 되었으면 수신 준비
 	puts("서버와 연결됨..");
@@ -317,7 +328,6 @@ void hardware_info(struct sockaddr_in servaddr, int s, struct hw_info h[], int *
 	}
 	*count = cnt;
 	hasInfo = true;
-	print_hw_info(h, *count);
 }
 
 void history_analysis() {
