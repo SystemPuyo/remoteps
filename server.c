@@ -141,7 +141,8 @@ int main(int argc, char * argv[]) {
             system(systemarg);
 
         }
-        read(accp_sock, & sel, sizeof(int));
+        if(sel != 3)
+            read(accp_sock, & sel, sizeof(int));
         //do something later
     }
 

@@ -163,7 +163,7 @@ int main(int argc, char * argv[]) {
 			show_file_list();
 			printf("select file to see : ");
 			scanf("%d", &sel);
-			if (sel > file_amt) {
+			if (sel >= file_amt) {
 				printf("the selected file does not exist");
 				break;
 			}
@@ -347,7 +347,6 @@ void history_analysis() {
 		printf("chosen file does not exist!");
 		return;
 	}
-	first--; second--;
 	if (isFileSimple[first] != isFileSimple[second]) {
 		printf("two chosen file's type are not same!");
 		return;
