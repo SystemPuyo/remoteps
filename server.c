@@ -11,6 +11,7 @@
 #include <pwd.h>
 #include<sys/stat.h>
 #include<netdb.h>
+#include<stdbool.h>
 
 #define MAXLINE 127
 
@@ -49,6 +50,7 @@ int main(int argc, char * argv[]) {
     char systemarg[100];
     int topcnt = 0,euid;
     struct stat tmp_stat;
+    bool hasInfo = false;
     uid_t my_uid = getuid();
     if (argc != 2) {
         printf("usage: %s port ", argv[0]);
@@ -83,10 +85,12 @@ int main(int argc, char * argv[]) {
             system(systemarg);
             break;
         case 3: //lshw 명령어 결과를 클라로 보내주기
+            if(hasInfo) continue;
             strcpy(filename,"lshw.txt");
             sprintf(systemarg,"lshw -short > %s",filename);
             send(accp_sock,&euid,sizeof(euid),0);//euid를 보내서 정보를 알림
             system(systemarg);
+            hasInfo = true;
             break;
         case 4:
         case 5:
