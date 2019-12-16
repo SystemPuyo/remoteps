@@ -118,7 +118,7 @@ int main(int argc, char * argv[]) {
 	while (1) {
 		sel = display_menu();
 		if (sel != 2)
-			send(s, &sel, sizeof(int), 0);
+			write(s, &sel, sizeof(int));
 		//서버로 입력한 값을 보낸다.
 
 		switch (sel) {
@@ -141,7 +141,7 @@ int main(int argc, char * argv[]) {
 		case 2:
 			sel = submenu_2(servaddr, s);
 			if (sel == -1) continue;
-			send(s, &sel, sizeof(int), 0);
+			write(s, &sel, sizeof(int));
 			break;
 		case 3:
 			hardware_info(servaddr, s, h, &hw_size);
@@ -192,6 +192,7 @@ int display_menu(void) {
 		printf("\n\t\t\t=================================================");
 		printf("\n\t\t\t=> ");
 		scanf("%s", input);
+        getchar();
 		
 		if (strcmp(input, "q") == 0 || strcmp(input, "Q") == 0)
 			return -1;
@@ -488,7 +489,7 @@ void get_file(struct sockaddr_in servaddr, int s, char(*filename)[20]) {
 
 	printf("file is receiving now.. \n");
 	while (total != filesize) {
-		sread = recv(s, buf, 100, 0);
+		sread = read(s, buf, 100);
 		total += sread;
 		buf[sread] = 0;
 		write(fp, buf, sread);

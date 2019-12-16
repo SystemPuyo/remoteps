@@ -9,6 +9,7 @@
 #include <arpa/inet.h>
 #include <time.h>
 #include <pwd.h>
+#include<sys/stat.h>
 
 #define MAXLINE 127
 
@@ -46,6 +47,7 @@ int main(int argc, char * argv[]) {
     int sel;
     char systemarg[100];
     int topcnt = 0,euid;
+    struct stat tmp_stat;
     uid_t my_uid = getuid();
     if (argc != 2) {
         printf("usage: %s port ", argv[0]);
@@ -64,7 +66,8 @@ int main(int argc, char * argv[]) {
     send(accp_sock, & my_uid, sizeof(my_uid), 0); 
     while (1) {
         printf("명령어를 기다리고 있습니다.\n");
-        recv(accp_sock, & sel, sizeof(int), 0);
+        read(accp_sock, & sel, sizeof(int));
+        printf("got %d\n",sel);
         //여기는 클라이언트에서 입력을 넘기면 그 입력 된 숫자를 받음 
         switch (sel) {
         case 21://ps 만들어서 클라로 보내주기
@@ -108,8 +111,10 @@ int main(int argc, char * argv[]) {
             exit(0);
         }
         send(accp_sock, filename, sizeof(filename), 0); //파일의 이름과
-
-        filesize = lseek(fp, 0, SEEK_END);
+        
+        fstat(fp,&tmp_stat);
+        filesize = tmp_stat.st_size;
+        printf("filename : %s filesize : %d",filename,filesize);
         send(accp_sock, & filesize, sizeof(filesize), 0); //파일의 사이즈를 전송
         lseek(fp, 0, SEEK_SET);
         printf("file is sending now.. \n");
@@ -117,7 +122,7 @@ int main(int argc, char * argv[]) {
             sread = read(fp, buf, 100);
             total += sread;
             buf[sread] = 0;
-            send(accp_sock, buf, sread, 0);
+            write(accp_sock, buf, sread);
             printf("processing :%4.2f%%\r", total * 100 / (float) filesize);
         }
         printf("\n");
@@ -128,6 +133,7 @@ int main(int argc, char * argv[]) {
             system(systemarg);
 
         }
+        read(accp_sock, & sel, sizeof(int));
         //do something later
     }
 
